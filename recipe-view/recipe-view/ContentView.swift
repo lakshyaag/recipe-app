@@ -11,10 +11,11 @@ struct ContentView: View {
     @State private var url: String = ""
     @State private var output: String = ""
     @State private var isShowingOutput: Bool = false
+    @State private var isLoading: Bool = false
 
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Enter Recipe URL")
                         .font(.headline)
@@ -27,15 +28,20 @@ struct ContentView: View {
 
                     Button(action: {
                         withAnimation {
-                            output = url
-                            isShowingOutput = true
+                            isLoading = true
+                            // Simulate network call
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                output = "Processed recipe from \(url)"
+                                isShowingOutput = true
+                                isLoading = false
+                            }
                         }
                     }) {
                         Text("Fetch Recipe")
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                            .background(LinearGradient(gradient: Gradient(colors: [AppColors.primary, AppColors.secondary]), startPoint: .leading, endPoint: .trailing))
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .shadow(radius: 5)
@@ -46,7 +52,13 @@ struct ContentView: View {
                 }
                 .padding(.top, 40)
 
-                if isShowingOutput {
+                if isLoading {
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle(tint: AppColors.primary))
+                        .padding()
+                }
+
+                if isShowingOutput && !isLoading {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Output")
                             .font(.headline)
@@ -54,7 +66,7 @@ struct ContentView: View {
 
                         Text(output)
                             .padding()
-                            .background(Color(UIColor.secondarySystemBackground))
+                            .background(AppColors.cardBackground)
                             .cornerRadius(10)
                             .padding(.horizontal)
                             .overlay(
@@ -68,7 +80,7 @@ struct ContentView: View {
                 Spacer()
             }
             .navigationTitle("Recipe Viewer")
-            .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+            .background(AppColors.background.edgesIgnoringSafeArea(.all))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
