@@ -5,16 +5,20 @@ struct RecipeCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(recipe.title)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+            HStack {
+                Image(systemName: "frying.pan")
+                    .foregroundColor(.primary)
+                Text(recipe.title)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+            }
             
             Text("Ingredients:")
                 .font(.headline)
                 .foregroundColor(.secondary)
             
-            ForEach(recipe.ingredients, id: \.self) { ingredient in
+            List(recipe.ingredients, id: \.self) { ingredient in
                 Text(ingredient)
                     .font(.body)
                     .foregroundColor(.secondary)
@@ -24,7 +28,7 @@ struct RecipeCard: View {
                 .font(.headline)
                 .foregroundColor(.secondary)
             
-            ForEach(recipe.instructions, id: \.self) { instruction in
+            List(recipe.instructions, id: \.self) { instruction in
                 Text(instruction)
                     .font(.body)
                     .foregroundColor(.secondary)
