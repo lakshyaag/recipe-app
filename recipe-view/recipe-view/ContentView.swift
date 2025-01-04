@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var url: String = ""
-    @State private var recipe: Recipe? = nil
-    @State private var isLoading: Bool = false
+    @StateObject private var viewModel = RecipeViewModel()
     
     var body: some View {
         NavigationView {
@@ -22,13 +20,13 @@ struct ContentView: View {
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        TextField("https://example.com/recipe", text: $url)
+                        TextField("https://example.com/recipe", text: $viewModel.url)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .padding(.horizontal)
                         
-                        Button(action: fetchRecipe) {
+                        Button(action: { viewModel.fetchRecipe() }) {
                             HStack {
                                 Image(systemName: "magnifyingglass")
                                 Text("Get Recipe")
@@ -53,14 +51,14 @@ struct ContentView: View {
                     .padding(.top, 20)
                     
                     // Loading Indicator
-                    if isLoading {
+                    if viewModel.isLoading {
                         ProgressView("Processing recipe...")
                             .progressViewStyle(CircularProgressViewStyle(tint: AppColors.primary))
                             .padding()
                     }
                     
                     // Recipe Display
-                    if let recipe = recipe {
+                    if let recipe = viewModel.recipe {
                         RecipeCard(recipe: recipe)
                             .padding(.horizontal)
                             .transition(.scale.combined(with: .opacity))
@@ -73,7 +71,7 @@ struct ContentView: View {
 			.background(AppColors.background)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: resetForm) {
+                    Button(action: { viewModel.resetForm() }) {
                         Image(systemName: "arrow.clockwise")
                             .foregroundColor(AppColors.primary)
                     }
