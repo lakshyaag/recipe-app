@@ -9,13 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        HStack {
+			VStack() {
+                Image(systemName: "globe")
+                    .imageScale(.large)
+                    .foregroundStyle(Color.blue)
+                Text("Hello, world!")
+            }
+			.padding()
+			
+            
+            Label("Recipes", systemImage: "list.bullet")
         }
-        .padding()
     }
 }
 
