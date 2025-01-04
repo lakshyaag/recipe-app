@@ -13,10 +13,10 @@ struct RecipeCard: View {
 					.fontWeight(.bold)
 					.foregroundColor(.primary)
 			}
-			// Add a divider after the title
+			
 			Divider().padding(.vertical, 8)
 			
-			// Cook time & difficulty in a horizontal stack
+			
 			HStack(spacing: 16) {
 				if let cookTime = recipe.cookTime, !cookTime.isEmpty {
 					Label(cookTime, systemImage: "clock")
@@ -31,7 +31,7 @@ struct RecipeCard: View {
 			}
 			.padding(.bottom, 8)
 
-			// Replace the existing "Ingredients:" segment with a section-like group:
+			
 			Group {
 				Text("Ingredients")
 					.font(.headline)
@@ -49,7 +49,7 @@ struct RecipeCard: View {
 			}
 			Divider().padding(.vertical, 8)
 
-			// Similarly for Instructions:
+			
 			Group {
 				Text("Instructions")
 					.font(.headline)

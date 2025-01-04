@@ -1,17 +1,8 @@
-from typing import TypedDict, List
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
-
+from src.schemas.recipe import Recipe
 from src.utils.text_utils import sanitize_text
-
-
-class Recipe(TypedDict):
-    """Represents a simple recipe object."""
-
-    title: str
-    ingredients: List[str]
-    instructions: List[str]
 
 
 def format_recipe(website_data: Document) -> Recipe:
