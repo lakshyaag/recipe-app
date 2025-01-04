@@ -46,7 +46,7 @@ struct ContentView: View {
                             .shadow(radius: 5)
                         }
                         .padding(.horizontal)
-                        .disabled(url.isEmpty || isLoading)
+                        .disabled(viewModel.url.isEmpty || viewModel.isLoading)
                     }
                     .padding(.top, 20)
                     
@@ -58,8 +58,8 @@ struct ContentView: View {
                     }
                     
                     // Recipe Display
-                    if let recipe = viewModel.recipe {
-                        RecipeCard(recipe: recipe)
+                    if let currentRecipe = viewModel.recipe {
+                        RecipeCard(recipe: currentRecipe)
                             .padding(.horizontal)
                             .transition(.scale.combined(with: .opacity))
                     }
@@ -80,47 +80,6 @@ struct ContentView: View {
         }
     }
     
-    private func fetchRecipe() {
-        guard let requestUrl = URL(string: "http://localhost:8000/process") else { return }
-        var request = URLRequest(url: requestUrl)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body: [String: Any] = ["url": url]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
-        
-        isLoading = true
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                isLoading = false
-                if let data = data {
-                    do {
-                        let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                        if let recipeData = jsonResponse?["recipe"] as? [String: Any] {
-                            let recipeJSONData = try JSONSerialization.data(withJSONObject: recipeData, options: [])
-                            let decodedRecipe = try JSONDecoder().decode(Recipe.self, from: recipeJSONData)
-                            self.recipe = decodedRecipe
-                        } else {
-                            print("Recipe key not found in response")
-                        }
-                    } catch {
-                        print("Error decoding recipe: \(error)")
-                    }
-                } else if let error = error {
-                    print("Error fetching recipe: \(error)")
-                }
-            }
-        }.resume()
-    }
-    
-    private func resetForm() {
-        withAnimation {
-            url = ""
-            recipe = nil
-            isLoading = false
-        }
-    }
 }
 
 #Preview {
