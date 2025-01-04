@@ -1,5 +1,6 @@
 from cleantext import clean
 
+
 def sanitize_text(text: str) -> str:
     return clean(
         text,
