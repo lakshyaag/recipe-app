@@ -9,91 +9,101 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var url: String = ""
-    @State private var output: String = ""
-    @State private var isShowingOutput: Bool = false
+    @State private var recipe: Recipe? = nil
     @State private var isLoading: Bool = false
-
+    
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Enter Recipe URL")
-                        .font(.headline)
-                        .padding(.horizontal)
-
-                    TextField("https://example.com", text: $url)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.horizontal)
-                        .padding(.bottom, 20)
-
-                    Button(action: {
-                        withAnimation {
-                            isLoading = true
-                            // Simulate network call
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                output = "Processed recipe from \(url)"
-                                isShowingOutput = true
-                                isLoading = false
+            ScrollView {
+                VStack(spacing: 24) {
+                    // URL Input Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Enter Recipe URL")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        TextField("https://example.com/recipe", text: $url)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .padding(.horizontal)
+                        
+                        Button(action: fetchRecipe) {
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                Text("Get Recipe")
                             }
-                        }
-                    }) {
-                        Text("Fetch Recipe")
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(LinearGradient(gradient: Gradient(colors: [AppColors.primary, AppColors.secondary]), startPoint: .leading, endPoint: .trailing))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
-                    }
-                    .padding(.horizontal)
-                    .scaleEffect(isShowingOutput ? 1.0 : 0.95)
-                    .animation(.easeInOut(duration: 0.2), value: isShowingOutput)
-                }
-                .padding(.top, 40)
-
-                if isLoading {
-                    ProgressView("Loading...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: AppColors.primary))
-                        .padding()
-                }
-
-                if isShowingOutput && !isLoading {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Output")
-                            .font(.headline)
-                            .padding(.horizontal)
-
-                        Text(output)
-                            .padding()
-                            .background(AppColors.cardBackground)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [AppColors.primary, AppColors.secondary]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                            .shadow(radius: 5)
+                        }
+                        .padding(.horizontal)
+                        .disabled(url.isEmpty || isLoading)
                     }
-                    .transition(.slide)
+                    .padding(.top, 20)
+                    
+                    // Loading Indicator
+                    if isLoading {
+                        ProgressView("Processing recipe...")
+                            .progressViewStyle(CircularProgressViewStyle(tint: AppColors.primary))
+                            .padding()
+                    }
+                    
+                    // Recipe Display
+                    if let recipe = recipe {
+                        RecipeCard(recipe: recipe)
+                            .padding(.horizontal)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                    
+                    Spacer(minLength: 20)
                 }
-
-                Spacer()
             }
             .navigationTitle("Recipe Viewer")
             .background(AppColors.background.edgesIgnoringSafeArea(.all))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        withAnimation {
-                            url = ""
-                            output = ""
-                            isShowingOutput = false
-                        }
-                    }) {
+                    Button(action: resetForm) {
                         Image(systemName: "arrow.clockwise")
+                            .foregroundColor(AppColors.primary)
                     }
                 }
             }
+        }
+    }
+    
+    private func fetchRecipe() {
+        withAnimation {
+            isLoading = true
+            // Simulate network call
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                recipe = Recipe(
+                    name: "Sample Recipe",
+                    description: "This is a sample recipe description that would come from the backend. It includes details about the dish and its preparation.",
+                    url: url
+                )
+                withAnimation {
+                    isLoading = false
+                }
+            }
+        }
+    }
+    
+    private func resetForm() {
+        withAnimation {
+            url = ""
+            recipe = nil
+            isLoading = false
         }
     }
 }
