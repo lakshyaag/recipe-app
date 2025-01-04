@@ -83,20 +83,31 @@ struct ContentView: View {
     }
     
     private func fetchRecipe() {
-        withAnimation {
-            isLoading = true
-            // Simulate network call
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                recipe = Recipe(
-                    name: "Sample Recipe",
-                    description: "This is a sample recipe description that would come from the backend. It includes details about the dish and its preparation.",
-                    url: url
-                )
-                withAnimation {
-                    isLoading = false
+        guard let requestUrl = URL(string: "http://localhost:5001/process") else { return }
+        var request = URLRequest(url: requestUrl)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = ["url": url]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+        
+        isLoading = true
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                isLoading = false
+                if let data = data {
+                    do {
+                        let decodedRecipe = try JSONDecoder().decode(Recipe.self, from: data)
+                        self.recipe = decodedRecipe
+                    } catch {
+                        print("Error decoding recipe: \(error)")
+                    }
+                } else if let error = error {
+                    print("Error fetching recipe: \(error)")
                 }
             }
-        }
+        }.resume()
     }
     
     private func resetForm() {
