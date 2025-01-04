@@ -1,4 +1,4 @@
-from typing import TypedDict, List
+from typing import TypedDict, List, Optional
 
 
 class Recipe(TypedDict):
@@ -7,3 +7,6 @@ class Recipe(TypedDict):
     title: str
     ingredients: List[str]
     instructions: List[str]
+    # Add these optional fields:
+    cookTime: Optional[str]
+    difficulty: Optional[str]

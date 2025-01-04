@@ -19,8 +19,10 @@ struct ContentView: View {
                         Text("Enter Recipe URL")
                             .font(.headline)
                             .padding(.horizontal)
-                        
                         TextField("https://example.com/recipe", text: $viewModel.url)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                            .accessibilityLabel("Enter recipe URL")
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
                             .disableAutocorrection(true)

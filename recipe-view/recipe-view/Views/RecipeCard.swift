@@ -13,6 +13,18 @@ struct RecipeCard: View {
 					.fontWeight(.bold)
 					.foregroundColor(.primary)
 			}
+            
+            if let cookTime = recipe.cookTime, !cookTime.isEmpty {
+                Text("Cook Time: \(cookTime)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            if let difficulty = recipe.difficulty, !difficulty.isEmpty {
+                Text("Difficulty: \(difficulty)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
 			Text("Ingredients:")
 				.font(.headline)
@@ -43,6 +55,7 @@ struct RecipeCard: View {
 				}
 			}
 		}
+        .accessibilityElement(children: .contain)
 		.padding()
 		.background(AppColors.cardBackground)
 		.cornerRadius(12)
