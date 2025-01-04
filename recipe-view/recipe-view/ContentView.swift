@@ -98,8 +98,14 @@ struct ContentView: View {
                 isLoading = false
                 if let data = data {
                     do {
-                        let decodedRecipe = try JSONDecoder().decode(Recipe.self, from: data)
-                        self.recipe = decodedRecipe
+                        let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        if let recipeData = jsonResponse?["recipe"] as? [String: Any] {
+                            let recipeJSONData = try JSONSerialization.data(withJSONObject: recipeData, options: [])
+                            let decodedRecipe = try JSONDecoder().decode(Recipe.self, from: recipeJSONData)
+                            self.recipe = decodedRecipe
+                        } else {
+                            print("Recipe key not found in response")
+                        }
                     } catch {
                         print("Error decoding recipe: \(error)")
                     }
