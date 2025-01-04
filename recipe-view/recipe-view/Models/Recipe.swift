@@ -1,6 +1,6 @@
 import Foundation
 
-struct Recipe: Identifiable {
+struct Recipe: Identifiable, Decodable {
     let id = UUID()
     let name: String
     let description: String
