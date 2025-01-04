@@ -8,18 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var url: String = ""
+    @State private var output: String = ""
+
     var body: some View {
-        HStack {
-			VStack() {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(Color.blue)
-                Text("Hello, world!")
+        VStack {
+            TextField("Enter URL", text: $url)
+                .padding()
+                .border(.secondary)
+
+            Button("Get Recipe") {
+                output = url
             }
-			.padding()
-			
-            
-            Label("Recipes", systemImage: "list.bullet")
+            .padding()
+
+            Text(output)
+                .padding()
         }
     }
 }
