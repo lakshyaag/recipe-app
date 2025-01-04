@@ -5,6 +5,12 @@ struct Recipe: Identifiable, Decodable {
     let name: String
     let description: String
     let url: String
+	
+	private enum CodingKeys: String, CodingKey {
+		case name
+		case description
+		case url
+	}
     
     static let mockRecipe = Recipe(
         name: "Delicious Pasta Carbonara",
