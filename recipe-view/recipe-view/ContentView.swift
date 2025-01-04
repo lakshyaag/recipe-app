@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var url: String = ""
+    @State private var url: String = "https://tastesbetterfromscratch.com/crispy-baked-chicken-wings/"
     @State private var recipe: Recipe? = nil
     @State private var isLoading: Bool = false
     
@@ -70,7 +70,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Recipe Viewer")
-            .background(AppColors.background.edgesIgnoringSafeArea(.all))
+			.background(AppColors.background)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: resetForm) {
@@ -103,6 +103,7 @@ struct ContentView: View {
                             let recipeJSONData = try JSONSerialization.data(withJSONObject: recipeData, options: [])
                             let decodedRecipe = try JSONDecoder().decode(Recipe.self, from: recipeJSONData)
                             self.recipe = decodedRecipe
+							print("decoded recipe", decodedRecipe)
                         } else {
                             print("Recipe key not found in response")
                         }
