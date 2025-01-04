@@ -5,26 +5,29 @@ struct RecipeCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(recipe.name)
+            Text(recipe.title)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
             
-            Text(recipe.description)
-                .font(.body)
+            Text("Ingredients:")
+                .font(.headline)
                 .foregroundColor(.secondary)
-                .lineLimit(4)
-                .multilineTextAlignment(.leading)
             
-            HStack {
-                Text("Source:")
-                    .font(.subheadline)
+            ForEach(recipe.ingredients, id: \.self) { ingredient in
+                Text(ingredient)
+                    .font(.body)
                     .foregroundColor(.secondary)
-                
-                Text(recipe.url)
-                    .font(.subheadline)
-                    .foregroundColor(AppColors.primary)
-                    .lineLimit(1)
+            }
+            
+            Text("Instructions:")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            ForEach(recipe.instructions, id: \.self) { instruction in
+                Text(instruction)
+                    .font(.body)
+                    .foregroundColor(.secondary)
             }
         }
         .padding()
