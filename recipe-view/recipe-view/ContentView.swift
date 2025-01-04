@@ -40,7 +40,6 @@ struct ContentView: View {
             }
             .navigationTitle("Recipe Viewer")
         }
-        }
     }
 }
 
