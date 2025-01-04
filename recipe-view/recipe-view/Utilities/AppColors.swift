@@ -1,8 +1,8 @@
 import SwiftUI
 
 enum AppColors {
-    static let primary = Color.blue
-    static let secondary = Color.blue.opacity(0.8)
-    static let background = Color(.systemBackground)
-    static let cardBackground = Color(.secondarySystemBackground)
+    static let primary = Color.green
+    static let secondary = Color.green.opacity(0.7)
+    static let background = Color(.systemGroupedBackground)
+    static let cardBackground = Color(.secondarySystemGroupedBackground)
 } 

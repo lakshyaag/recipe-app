@@ -36,16 +36,7 @@ struct RecipeCard: View {
 				Text("Ingredients")
 					.font(.headline)
 					.foregroundColor(.primary)
-				ScrollView(showsIndicators: false) {
-					VStack(alignment: .leading, spacing: 8) {
-						ForEach(recipe.ingredients, id: \.self) { ingredient in
-							Text(ingredient)
-								.font(.body)
-								.foregroundColor(.secondary)
-						}
-					}
-					.padding(.vertical, 4)
-				}
+				IngredientsGridView(ingredients: recipe.ingredients)
 			}
 			Divider().padding(.vertical, 8)
 
@@ -54,21 +45,12 @@ struct RecipeCard: View {
 				Text("Instructions")
 					.font(.headline)
 					.foregroundColor(.primary)
-				ScrollView(showsIndicators: false) {
-					VStack(alignment: .leading, spacing: 8) {
-						ForEach(recipe.instructions, id: \.self) { instruction in
-							Text(instruction)
-								.font(.body)
-								.foregroundColor(.secondary)
-						}
-					}
-					.padding(.vertical, 4)
-				}
+				SwipeInstructionsView(instructions: recipe.instructions)
 			}
 		}
         .accessibilityElement(children: .contain)
 		.padding()
-		.background(.regularMaterial)
+		.background(.ultraThickMaterial)
 		.cornerRadius(12)
 		.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
 	}

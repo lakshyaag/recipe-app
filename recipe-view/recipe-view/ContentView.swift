@@ -61,9 +61,20 @@ struct ContentView: View {
                     
                     // Recipe Display
                     if let currentRecipe = viewModel.recipe {
-                        RecipeCard(recipe: currentRecipe)
-                            .padding(.horizontal)
-                            .transition(.scale.combined(with: .opacity))
+                        VStack(spacing: 24) {
+                            // Original recipe card (optional)
+                            RecipeCard(recipe: currentRecipe)
+
+                            // NEW: ingredients grid
+                            IngredientsGridView(ingredients: currentRecipe.ingredients)
+                                .padding(.horizontal)
+
+                            // NEW: swipe-based instructions
+                            SwipeInstructionsView(instructions: currentRecipe.instructions)
+                                .padding(.horizontal)
+                                .frame(height: 300)
+                        }
+                        .transition(.scale.combined(with: .opacity))
                     }
                     
                     Spacer(minLength: 20)
