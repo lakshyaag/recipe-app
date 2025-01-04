@@ -6,10 +6,16 @@ from src.schemas.state import GraphState
 
 
 def process_recipe(state: GraphState) -> Recipe:
-    url = state["url"]
-    website_data = get_recipe_from_url(url)
-    recipe = format_recipe(website_data)
-    return {"recipe": recipe}
+    try:
+        url = state["url"]
+        print(url)
+        website_data = get_recipe_from_url(url)
+        print(website_data)
+
+        recipe = format_recipe(website_data)
+        return {"recipe": recipe}
+    except Exception as e:
+        raise e
 
 
 workflow = StateGraph(GraphState)

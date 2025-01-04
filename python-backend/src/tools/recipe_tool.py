@@ -17,7 +17,9 @@ class Recipe(TypedDict):
 def format_recipe(website_data: Document) -> Recipe:
     model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     messages = [
-        SystemMessage("Please extract recipes from the following website: "),
+        SystemMessage(
+            "Please extract recipes from the following website content. If a recipe is not found, return an empty recipe."
+        ),
         HumanMessage(content=sanitize_text(website_data.page_content)),
     ]
 

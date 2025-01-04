@@ -41,6 +41,12 @@ async def process_url(request_payload: RequestPayload) -> Dict:
             run_id=run["run_id"],
         )
 
+        if "recipe" not in result:
+            raise HTTPException(
+                status_code=500,
+                detail="No recipe found. Please check the URL and try again.",
+            )
+
         return result
 
     except Exception as e:
