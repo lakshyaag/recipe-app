@@ -83,7 +83,7 @@ struct ContentView: View {
     }
     
     private func fetchRecipe() {
-        guard let requestUrl = URL(string: "http://localhost:5001/process") else { return }
+        guard let requestUrl = URL(string: "http://localhost:8000/process") else { return }
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
