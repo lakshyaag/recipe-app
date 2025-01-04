@@ -47,7 +47,5 @@ class RecipeViewModel: ObservableObject {
         }
     }
     
-    // Add these optional fields:
-    let cookTime: String?
-    let difficulty: String?
+    
 }

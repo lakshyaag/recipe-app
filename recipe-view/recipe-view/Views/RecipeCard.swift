@@ -64,6 +64,6 @@ struct RecipeCard: View {
 }
 
 #Preview {
-	RecipeCard(recipe: Recipe(title: "Sample Recipe", ingredients: ["1 cup flour", "2 eggs"], instructions: ["Mix ingredients", "Bake for 20 minutes"]))
+	RecipeCard(recipe: Recipe.mockRecipe)
 		.padding()
 }
