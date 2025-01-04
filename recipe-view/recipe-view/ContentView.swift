@@ -41,6 +41,8 @@ struct ContentView: View {
                             .shadow(radius: 5)
                     }
                     .padding(.horizontal)
+                    .scaleEffect(isShowingOutput ? 1.0 : 0.95)
+                    .animation(.easeInOut(duration: 0.2), value: isShowingOutput)
                 }
                 .padding(.top, 40)
 
@@ -55,6 +57,10 @@ struct ContentView: View {
                             .background(Color(UIColor.secondarySystemBackground))
                             .cornerRadius(10)
                             .padding(.horizontal)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                            )
                     }
                     .transition(.slide)
                 }
@@ -63,6 +69,19 @@ struct ContentView: View {
             }
             .navigationTitle("Recipe Viewer")
             .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        withAnimation {
+                            url = ""
+                            output = ""
+                            isShowingOutput = false
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                }
+            }
         }
     }
 }
