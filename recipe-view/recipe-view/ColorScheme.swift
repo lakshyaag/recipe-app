@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct AppColors {
-    static let primary = Color("PrimaryColor")
-    static let secondary = Color("SecondaryColor")
+    static let primary = Color("AppPrimaryColor")
+    static let secondary = Color("AppSecondaryColor")
     static let background = Color("BackgroundColor")
     static let cardBackground = Color("CardBackgroundColor")
 }
