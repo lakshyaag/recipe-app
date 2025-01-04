@@ -12,18 +12,34 @@ struct ContentView: View {
     @State private var output: String = ""
 
     var body: some View {
-        VStack {
-            TextField("Enter URL", text: $url)
-                .padding()
-                .border(.secondary)
+        NavigationView {
+            Form {
+                Section(header: Text("Recipe URL")) {
+                    TextField("Enter URL", text: $url)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.vertical, 8)
+                }
 
-            Button("Get Recipe") {
-                output = url
+                Section {
+                    Button(action: {
+                        output = url
+                    }) {
+                        Text("Get Recipe")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                }
+
+                Section(header: Text("Output")) {
+                    Text(output)
+                        .padding()
+                }
             }
-            .padding()
-
-            Text(output)
-                .padding()
+            .navigationTitle("Recipe Viewer")
+        }
         }
     }
 }
