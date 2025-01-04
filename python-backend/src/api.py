@@ -1,13 +1,12 @@
+from typing import Dict
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from langgraph_sdk.client import get_client
 import os
 
-from src.schemas.state import GraphState
 
-
-class URLInput(BaseModel):
+class RequestPayload(BaseModel):
     url: str
 
 
@@ -15,7 +14,7 @@ app = FastAPI(debug=True)
 
 
 @app.post("/process")
-async def process_url(url_input: URLInput) -> GraphState:
+async def process_url(request_payload: RequestPayload) -> Dict:
     """
     Accepts a URL and returns the output payload from processing it.
     """
@@ -25,17 +24,21 @@ async def process_url(url_input: URLInput) -> GraphState:
             api_key=os.environ.get("LANGCHAIN_API_KEY"),
         )
 
-        thread = await client.threads.create()
+        thread = await client.threads.create(
+            metadata={
+                "user_agent": os.environ.get("USER_AGENT"),
+            }
+        )
 
         run = await client.runs.create(
-            thread_id=thread.thread_id,
-            assistant_id="default",
-            input={"url": url_input.url},
+            assistant_id="agent",
+            thread_id=thread["thread_id"],
+            input={"url": request_payload.url},
         )
 
         result = await client.runs.join(
-            thread_id=thread.thread_id,
-            run_id=run.run_id,
+            thread_id=thread["thread_id"],
+            run_id=run["run_id"],
         )
 
         return result
