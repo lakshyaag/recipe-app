@@ -29,7 +29,10 @@ def process_recipe(state: GraphState) -> Recipe:
         raise e
 
 
-def extract_times(state: GraphState) -> GraphState:
+def break_down_time(state: GraphState) -> GraphState:
+    recipe = state["recipe"]
+    updated = parse_instruction_times(recipe)
+    return {"recipe": updated}
     recipe = state["recipe"]
     try:
         if not recipe:
