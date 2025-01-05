@@ -1,18 +1,18 @@
 from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 
-
 class Ingredient(BaseModel):
     """
     Represents an ingredient in a recipe.
     """
 
-    item: str = Field(..., description="The name of the ingredient")
+    item: str = Field(..., description="The name of the ingredient.")
     amount: float = Field(..., description="The quantity of the ingredient")
     unit: str = Field(..., description="The unit of measurement for the ingredient")
     notes: Optional[str] = Field(
         None, description="Any additional notes about the ingredient"
     )
+
 
 
 class Time(BaseModel):
@@ -39,9 +39,7 @@ class InstructionWithTime(Instruction):
     Represents a cooking instruction in a recipe with time.
     """
 
-    time: Time = Field(
-        ..., description="The time needed for the instruction"
-    )
+    time: Time = Field(..., description="The time needed for the instruction")
 
 
 class Recipe(BaseModel):

@@ -39,51 +39,6 @@ struct RecipeCard: View {
 				}
 				.foregroundColor(AppColors.secondaryText)
 			}
-			
-			Divider()
-				.background(AppColors.divider)
-			
-			// Ingredients Section
-			VStack(alignment: .leading, spacing: 16) {
-				Label("Ingredients", systemImage: "basket.fill")
-					.font(.system(.title2, design: .rounded, weight: .semibold))
-					.foregroundStyle(AppColors.text)
-					.symbolRenderingMode(.hierarchical)
-				
-                ForEach(recipe.ingredients, id: \.item) { ingredient in
-                    Text("\(ingredient.amount, specifier: "%.1f") \(ingredient.unit) \(ingredient.item)")
-                        .font(.body)
-                    if let notes = ingredient.notes, !notes.isEmpty {
-                        Text(notes)
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                    }
-                }
-			}
-			
-			Divider()
-				.background(AppColors.divider)
-			
-			// Instructions Section
-			VStack(alignment: .leading, spacing: 16) {
-				Label("Instructions", systemImage: "list.bullet.clipboard.fill")
-					.font(.system(.title2, design: .rounded, weight: .semibold))
-					.foregroundStyle(AppColors.text)
-					.symbolRenderingMode(.hierarchical)
-				
-                ForEach(recipe.instructions, id: \.step) { instruction in
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Step \(instruction.step)")
-                            .font(.headline)
-                        Text(instruction.description)
-                        if let timeInfo = instruction.time {
-                            Text("Time: \(timeInfo.amount, specifier: "%.1f") \(timeInfo.unit)")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                        }
-                    }
-                }
-			}
 		}
 		.padding(20)
 		.background(AppColors.cardBackground)
