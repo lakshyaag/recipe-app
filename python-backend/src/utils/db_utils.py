@@ -87,7 +87,6 @@ class SupabaseClient:
         )
         return recipe_response.data[0]["id"]
 
-    # TODO: fix insertion error
     async def get_or_create_ingredient(self, item: str) -> str:
         ingredient_response = (
             self.supabase.table("ingredients")
@@ -96,51 +95,61 @@ class SupabaseClient:
             .maybe_single()
             .execute()
         )
+
         if ingredient_response:
             return ingredient_response.data["id"]
 
         new_ingredient = (
             self.supabase.table("ingredients").insert({"item": item}).execute()
         )
+
         return new_ingredient.data[0]["id"]
 
-    # TODO: fix insertion error
     async def insert_recipe_ingredient(
         self, recipe_id: str, ingredient: Ingredient, ingredient_id: str
     ):
-        await (
-            self.supabase.table("recipe_ingredients")
-            .insert(
-                {
-                    "recipe_id": recipe_id,
-                    "ingredient_id": ingredient_id,
-                    "amount": ingredient.amount,
-                    "unit": ingredient.unit,
-                    "notes": ingredient.notes,
-                }
+        try:
+            recipe_ingredient_response = (
+                self.supabase.table("recipe_ingredients")
+                .insert(
+                    {
+                        "recipe_id": recipe_id,
+                        "ingredient_id": ingredient_id,
+                        "amount": ingredient.amount,
+                        "unit": ingredient.unit,
+                        "notes": ingredient.notes,
+                    }
+                )
+                .execute()
             )
-            .execute()
-        )
+            return recipe_ingredient_response.data[0]["id"]
+        except Exception as e:
+            print(f"Error inserting recipe ingredient: {str(e)}")
+            return None
 
-    # TODO: fix insertion error
     async def insert_instruction(self, recipe_id: str, instruction: Instruction):
-        await (
-            self.supabase.table("instructions")
-            .insert(
-                {
-                    "recipe_id": recipe_id,
-                    "step_number": instruction.step,
-                    "description": instruction.description,
-                    "time_amount": instruction.time.amount
-                    if hasattr(instruction, "time")
-                    else None,
-                    "time_unit": instruction.time.unit
-                    if hasattr(instruction, "time")
-                    else None,
-                }
+        try:
+            instruction_response = (
+                self.supabase.table("instructions")
+                .insert(
+                    {
+                        "recipe_id": recipe_id,
+                        "step_number": instruction.step,
+                        "description": instruction.description,
+                        "time_amount": instruction.time.amount
+                        if hasattr(instruction, "time")
+                        else None,
+                        "time_unit": instruction.time.unit
+                        if hasattr(instruction, "time")
+                        else None,
+                    }
+                )
+                .execute()
             )
-            .execute()
-        )
+            return instruction_response.data[0]["id"]
+        except Exception as e:
+            print(f"Error inserting instruction: {str(e)}")
+            return None
 
     async def insert_recipe(self, recipe: Recipe, recipe_url: str) -> str:
         try:
