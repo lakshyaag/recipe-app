@@ -1,7 +1,7 @@
 import SwiftUI
 
 class RecipeViewModel: ObservableObject {
-    @Published var url: String = "k"
+    @Published var url: String = "https://www.allrecipes.com/bang-bang-chicken-nuggets-recipe-8767654"
 	@Published var recipe: Recipe? = mockRecipe
     @Published var isLoading: Bool = false
     

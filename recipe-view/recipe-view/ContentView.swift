@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
 	@StateObject private var viewModel = RecipeViewModel()
-	@State private var selectedTab: Tab = .ingredients // Track the selected tab
+	@State private var selectedTab: Tab = .ingredients
 
 	enum Tab {
 		case ingredients
@@ -102,16 +102,13 @@ struct ContentView: View {
 					// Recipe Display
 					if let currentRecipe = viewModel.recipe {
 						VStack(spacing: 16) {
-							// Tab Bar
-							HStack {
-								TabButton(title: "Ingredients", isSelected: selectedTab == .ingredients) {
-									selectedTab = .ingredients
-								}
-								TabButton(title: "Instructions", isSelected: selectedTab == .instructions) {
-									selectedTab = .instructions
-								}
+							// Segmented Control for Tabs
+							Picker("View", selection: $selectedTab) {
+								Text("Ingredients").tag(Tab.ingredients)
+								Text("Instructions").tag(Tab.instructions)
 							}
-							.padding(.horizontal, 16)
+							.pickerStyle(.segmented)
+							.padding(.horizontal)
 
 							// Tab Content
 							switch selectedTab {
