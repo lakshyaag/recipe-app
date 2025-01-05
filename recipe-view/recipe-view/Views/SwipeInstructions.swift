@@ -10,7 +10,6 @@ import SwiftUI
 struct SwipeInstructionsView: View {
 	let instructions: [String]
 	@State private var currentStep = 0
-	@State private var expandedStep: Int? = nil
 	
 	var body: some View {
 		VStack(spacing: 16) {
@@ -27,7 +26,7 @@ struct SwipeInstructionsView: View {
 			// Swipeable steps
 			TabView(selection: $currentStep) {
 				ForEach(instructions.indices, id: \.self) { idx in
-					ScrollView {
+					ScrollView(showsIndicators: false) {
 						VStack(spacing: 16) {
 							// Step header
 							HStack {
@@ -52,58 +51,33 @@ struct SwipeInstructionsView: View {
 							}
 							
 							// Step content
-							VStack(alignment: .leading, spacing: 8) {
-								Text(instructions[idx])
-									.font(.body)
-									.foregroundColor(AppColors.text)
-									.lineSpacing(4)
-									.lineLimit(expandedStep == idx ? nil : 3)
-									.multilineTextAlignment(.leading)
-								
-								if expandedStep != idx {
-									Button {
-										withAnimation(.easeInOut(duration: 0.3)) {
-											expandedStep = idx
-										}
-									} label: {
-										Text("Show More")
-											.font(.footnote.bold())
-											.foregroundColor(AppColors.primary)
-									}
-								} else {
-									Button {
-										withAnimation(.easeInOut(duration: 0.3)) {
-											expandedStep = nil
-										}
-									} label: {
-										Text("Show Less")
-											.font(.footnote.bold())
-											.foregroundColor(AppColors.primary)
-									}
-								}
-							}
+							Text(instructions[idx])
+								.font(.body)
+								.foregroundColor(AppColors.text)
+								.lineSpacing(4)
+								.multilineTextAlignment(.leading)
+								.fixedSize(horizontal: false, vertical: true)
 						}
 						.padding(16)
 						.frame(maxWidth: .infinity, alignment: .leading)
 						.background(AppColors.cardBackground)
 						.cornerRadius(12)
-						.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-						.padding(.horizontal)
 					}
+					.padding(.horizontal)
 					.tag(idx)
 				}
 			}
 			.tabViewStyle(.page(indexDisplayMode: .never))
-			.frame(minHeight: 200)
+			.frame(height: 250)
 		}
 	}
 }
 
 #Preview {
 	SwipeInstructionsView(instructions: [
-		"First step of the recipe with detailed instructions that might be quite long and need multiple lines to display properly. Adding more text to show how the expansion works with longer content that needs to be displayed properly. This is an even longer step to really test the expansion behavior with multiple lines of text that should be hidden initially.",
-		"Second step with more details about what to do. This step also has quite a bit of content to demonstrate the expansion behavior. Adding some more text to make it longer and test the expansion properly.",
-		"Final step to complete the recipe. Making this one a bit longer as well to test the expansion functionality properly. This step should also have enough content to demonstrate the expansion behavior."
+		"First step of the recipe with detailed instructions that might be quite long and need multiple lines to display properly. This is a very long instruction to test the scrolling behavior.",
+		"Second step with more details about what to do. Adding more text to ensure we can see how the scrolling works with longer content.",
+		"Final step to complete the recipe. This step also contains detailed instructions that might need multiple lines to display properly."
 	])
 	.padding()
 	.background(AppColors.background)

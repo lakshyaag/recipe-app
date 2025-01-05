@@ -8,11 +8,6 @@ struct RecipeCard: View {
 			// Header
 			VStack(alignment: .leading, spacing: 16) {
 				HStack(spacing: 12) {
-					Image(systemName: "leaf.circle.fill")
-						.font(.system(size: 36))
-						.foregroundStyle(AppColors.accent)
-						.symbolRenderingMode(.hierarchical)
-					
 					Text(recipe.title)
 						.font(.system(.title, design: .rounded, weight: .bold))
 						.foregroundColor(AppColors.text)
@@ -36,7 +31,7 @@ struct RecipeCard: View {
 								Text(difficulty.capitalized)
 									.font(.subheadline)
 							} icon: {
-								Image(systemName: "gauge.with.dots.needle.bottom")
+								Image(systemName: "gauge.with.dots.needle.50percent")
 									.foregroundStyle(AppColors.accent)
 									.symbolRenderingMode(.hierarchical)
 							}

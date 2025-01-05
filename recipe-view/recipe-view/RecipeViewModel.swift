@@ -1,12 +1,12 @@
 import SwiftUI
 
 class RecipeViewModel: ObservableObject {
-    @Published var url: String = "https://www.wellplated.com/ground-beef-and-potatoes/"
+    @Published var url: String = ""
 	@Published var recipe: Recipe? = Recipe.mockRecipe
     @Published var isLoading: Bool = false
     
     func fetchRecipe() {
-        guard let requestUrl = URL(string: "http://localhost:8000/process") else { return }
+        guard let requestUrl = URL(string: "http://10.88.111.10:8000/process") else { return }
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
