@@ -4,9 +4,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from src.utils.db_utils import SupabaseClient
-from src.schemas.recipe import Recipe
-from langgraph_sdk.client import get_client
-import os
+from src.graph import graph
 
 
 class RequestPayload(BaseModel):
@@ -21,6 +19,12 @@ async def root():
     return {
         "message": "Welcome to the Recipe API. Please visit /docs for more information."
     }
+
+
+# health check
+@app.get("/ok")
+async def ok():
+    return {"message": "ok"}
 
 
 @app.post("/process")
@@ -40,27 +44,7 @@ async def process_url(request_payload: RequestPayload) -> Dict:
         return {"recipe_id": existing_recipe_id, "recipe": recipe_data}
 
     try:
-        client = get_client(
-            url="http://127.0.0.1:5001",
-            api_key=os.environ.get("LANGCHAIN_API_KEY"),
-        )
-
-        thread = await client.threads.create(
-            metadata={
-                "user_agent": os.environ.get("USER_AGENT"),
-            }
-        )
-
-        run = await client.runs.create(
-            assistant_id="agent",
-            thread_id=thread["thread_id"],
-            input={"url": request_payload.url},
-        )
-
-        result = await client.runs.join(
-            thread_id=thread["thread_id"],
-            run_id=run["run_id"],
-        )
+        result = graph.invoke({"url": request_payload.url})
 
         if "recipe" not in result:
             raise HTTPException(
@@ -69,10 +53,9 @@ async def process_url(request_payload: RequestPayload) -> Dict:
             )
 
         recipe_data = result["recipe"]
-        recipe = Recipe(**recipe_data)
 
         # Store in database
-        recipe_id = await db_client.insert_recipe(recipe, request_payload.url)
+        recipe_id = await db_client.insert_recipe(recipe_data, request_payload.url)
 
         # Return complete recipe data
         return {

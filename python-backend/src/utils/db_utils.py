@@ -75,6 +75,7 @@ class SupabaseClient:
             .insert(
                 {
                     "title": recipe.title,
+                    "servings": recipe.servings,
                     "difficulty": recipe.difficulty,
                     "cook_time_amount": recipe.cookTime.amount
                     if recipe.cookTime
