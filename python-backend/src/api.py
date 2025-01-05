@@ -17,7 +17,9 @@ app = FastAPI(debug=True)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the Recipe API. Please visit /docs for more information."}
+    return {
+        "message": "Welcome to the Recipe API. Please visit /docs for more information."
+    }
 
 
 @app.post("/process")
@@ -29,18 +31,15 @@ async def process_url(request_payload: RequestPayload) -> Dict:
     db_client = SupabaseClient()
     url_hash = db_client.create_url_hash(request_payload.url)
 
-    # Check if recipe exists
+    # # Check if recipe exists
     existing_recipe_id = await db_client.get_existing_recipe(url_hash)
     if existing_recipe_id:
         recipe_data = await db_client.get_recipe_by_id(existing_recipe_id)
-        return {
-            "recipe_id": existing_recipe_id,
-            "recipe": recipe_data
-        }
+        return {"recipe_id": existing_recipe_id, "recipe": recipe_data}
 
     try:
         client = get_client(
-            url="http://127.0.0.1:2024",
+            url="http://127.0.0.1:5001",
             api_key=os.environ.get("LANGCHAIN_API_KEY"),
         )
 
@@ -76,10 +75,8 @@ async def process_url(request_payload: RequestPayload) -> Dict:
         # Return complete recipe data
         return {
             "recipe_id": recipe_id,
-            "recipe": await db_client.get_recipe_by_id(recipe_id)
+            "recipe": await db_client.get_recipe_by_id(recipe_id),
         }
-
-        return result
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
