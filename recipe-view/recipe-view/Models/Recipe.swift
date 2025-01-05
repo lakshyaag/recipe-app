@@ -5,7 +5,7 @@ struct Recipe: Decodable {
     let title: String
     let ingredients: [Ingredient]
     let instructions: [InstructionWithTime]
-    let cookTime: String?
+    let cookTime: Time?
     let difficulty: String?
 }
 
@@ -19,10 +19,10 @@ struct Ingredient: Decodable {
 struct InstructionWithTime: Decodable {
     let step: Int
     let description: String
-    let time: InstructionTime?
+    let time: Time?
 }
 
-struct InstructionTime: Decodable {
+struct Time: Decodable {
     let amount: Double
     let unit: String
 }

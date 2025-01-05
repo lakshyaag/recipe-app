@@ -15,9 +15,9 @@ class Ingredient(BaseModel):
     )
 
 
-class InstructionTime(BaseModel):
+class Time(BaseModel):
     """
-    Represents the time needed for an instruction in a recipe.
+    Represents the time needed in a recipe.
     # TODO: This will eventually map to a time UI component in the frontend
     """
 
@@ -39,7 +39,7 @@ class InstructionWithTime(Instruction):
     Represents a cooking instruction in a recipe with time.
     """
 
-    time: InstructionTime = Field(
+    time: Time = Field(
         ..., description="The time needed for the instruction"
     )
 
@@ -54,5 +54,5 @@ class Recipe(BaseModel):
     instructions: Union[List[Instruction], List[InstructionWithTime]] = Field(
         ..., description="The instructions for the recipe"
     )
-    cookTime: Optional[str] = Field(None, description="The cook time for the recipe")
+    cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
     difficulty: Optional[str] = Field(None, description="The difficulty of the recipe")
