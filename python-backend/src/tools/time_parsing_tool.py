@@ -5,6 +5,7 @@ from src.schemas.recipe import InstructionWithTime, Recipe
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from pydantic_core import to_jsonable_python
 import json
+from textwrap import dedent
 
 
 class Response(BaseModel):
@@ -28,7 +29,13 @@ def parse_instruction_times(recipe: Recipe) -> Recipe:
 
     messages = [
         SystemMessage(
-            "From the provided recipe, please inspect each instruction item for things that might indicate time. If you find any, please return the updated recipe with the time added."
+            dedent(
+                """
+                From the provided recipe, please inspect each instruction and identify the time that is specified.
+
+                If a time range is specified, please convert it to an appropriate single time value.
+                """
+            )
         ),
         AIMessage(content=json.dumps(to_jsonable_python(recipe))),
         HumanMessage(content=instructions),
