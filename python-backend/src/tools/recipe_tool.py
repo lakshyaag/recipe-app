@@ -16,6 +16,8 @@ def format_recipe(website_data: List[Document]) -> Recipe:
                 """
                 Please extract the recipe from the following website content. 
                 If a recipe is not found, return an empty recipe.
+
+                For each instruction, include the time if it is specified. If a time range is specified, use your best judgement to determine the correct amount of time.
                 """
             )
         ),

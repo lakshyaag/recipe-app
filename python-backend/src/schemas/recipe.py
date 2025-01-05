@@ -1,5 +1,6 @@
-from typing import List, Optional, Union
+from typing import List, Literal, Optional
 from pydantic import BaseModel, Field
+
 
 class Ingredient(BaseModel):
     """
@@ -12,7 +13,6 @@ class Ingredient(BaseModel):
     notes: Optional[str] = Field(
         None, description="Any additional notes about the ingredient"
     )
-
 
 
 class Time(BaseModel):
@@ -32,25 +32,23 @@ class Instruction(BaseModel):
 
     step: int = Field(..., description="The step number in the instruction sequence")
     description: str = Field(..., description="The description of the instruction")
-
-
-class InstructionWithTime(Instruction):
-    """
-    Represents a cooking instruction in a recipe with time.
-    """
-
-    time: Time = Field(..., description="The time needed for the instruction")
+    time: Optional[Time] = Field(
+        None, description="The time specified in the instruction"
+    )
 
 
 class Recipe(BaseModel):
     """Represents a simple recipe object."""
 
     title: str = Field(..., description="The name of the recipe")
+    servings: int = Field(..., description="The number of servings the recipe makes")
     ingredients: List[Ingredient] = Field(
         ..., description="The ingredients needed for the recipe"
     )
-    instructions: Union[List[Instruction], List[InstructionWithTime]] = Field(
+    instructions: List[Instruction] = Field(
         ..., description="The instructions for the recipe"
     )
     cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
-    difficulty: Optional[str] = Field(None, description="The difficulty of the recipe")
+    difficulty: Literal["novice", "home_cook", "professional_chef"] = Field(
+        ..., description="The difficulty of the recipe"
+    )

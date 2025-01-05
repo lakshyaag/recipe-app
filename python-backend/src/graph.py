@@ -3,7 +3,6 @@ from langgraph.graph import StateGraph, END, START
 from src.utils.logger import logger
 from src.utils.document_loader import get_website_data
 from src.tools.recipe_tool import format_recipe
-from src.tools.time_parsing_tool import parse_instruction_times
 from src.schemas.state import GraphState
 
 
@@ -32,28 +31,13 @@ def process_recipe(state: GraphState) -> GraphState:
         raise e
 
 
-def break_down_time(state: GraphState) -> GraphState:
-    recipe = state["recipe"]
-
-    try:
-        if not recipe:
-            raise ValueError("No recipe found")
-
-        updated_recipe = parse_instruction_times(recipe)
-        return {"recipe": updated_recipe}
-
-    except Exception as e:
-        raise e
-
-
 workflow = StateGraph(GraphState)
 workflow.add_node("parse_link", parse_link)
 workflow.add_node("process_recipe", process_recipe)
-workflow.add_node("break_down_time", break_down_time)
 workflow.add_edge(START, "parse_link")
 workflow.add_edge("parse_link", "process_recipe")
-workflow.add_edge("process_recipe", "break_down_time")
-workflow.add_edge("break_down_time", END)
+workflow.add_edge("process_recipe", END)
 workflow.set_entry_point("parse_link")
 
 graph = workflow.compile()
+graph.name = "Recipe Graph"
