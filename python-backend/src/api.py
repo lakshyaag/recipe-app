@@ -2,6 +2,8 @@ from typing import Dict
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from src.utils.db_utils import SupabaseClient
+from src.schemas.recipe import Recipe
 from langgraph_sdk.client import get_client
 import os
 
@@ -21,11 +23,24 @@ async def root():
 @app.post("/process")
 async def process_url(request_payload: RequestPayload) -> Dict:
     """
+    Checks if the recipe already exists in database.
     Accepts a URL and returns the output payload from processing it.
     """
+    db_client = SupabaseClient()
+    url_hash = db_client.create_url_hash(request_payload.url)
+
+    # Check if recipe exists
+    existing_recipe_id = await db_client.get_existing_recipe(url_hash)
+    if existing_recipe_id:
+        recipe_data = await db_client.get_recipe_by_id(existing_recipe_id)
+        return {
+            "recipe_id": existing_recipe_id,
+            "recipe": recipe_data
+        }
+
     try:
         client = get_client(
-            url="http://localhost:5001",
+            url="http://127.0.0.1:2024",
             api_key=os.environ.get("LANGCHAIN_API_KEY"),
         )
 
@@ -51,6 +66,18 @@ async def process_url(request_payload: RequestPayload) -> Dict:
                 status_code=500,
                 detail="No recipe found. Please check the URL and try again.",
             )
+
+        recipe_data = result["recipe"]
+        recipe = Recipe(**recipe_data)
+
+        # Store in database
+        recipe_id = await db_client.insert_recipe(recipe, request_payload.url)
+
+        # Return complete recipe data
+        return {
+            "recipe_id": recipe_id,
+            "recipe": await db_client.get_recipe_by_id(recipe_id)
+        }
 
         return result
 
