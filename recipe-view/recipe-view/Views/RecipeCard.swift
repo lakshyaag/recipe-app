@@ -50,7 +50,15 @@ struct RecipeCard: View {
 					.foregroundStyle(AppColors.text)
 					.symbolRenderingMode(.hierarchical)
 				
-				IngredientsGridView(ingredients: recipe.ingredients)
+                ForEach(recipe.ingredients, id: \.item) { ingredient in
+                    Text("\(ingredient.amount, specifier: "%.1f") \(ingredient.unit) \(ingredient.item)")
+                        .font(.body)
+                    if let notes = ingredient.notes, !notes.isEmpty {
+                        Text(notes)
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
+                }
 			}
 			
 			Divider()
@@ -63,7 +71,18 @@ struct RecipeCard: View {
 					.foregroundStyle(AppColors.text)
 					.symbolRenderingMode(.hierarchical)
 				
-				SwipeInstructionsView(instructions: recipe.instructions)
+                ForEach(recipe.instructions, id: \.step) { instruction in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Step \(instruction.step)")
+                            .font(.headline)
+                        Text(instruction.description)
+                        if let timeInfo = instruction.time {
+                            Text("Time: \(timeInfo.amount, specifier: "%.1f") \(timeInfo.unit)")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
 			}
 		}
 		.padding(20)
@@ -73,7 +92,7 @@ struct RecipeCard: View {
 }
 
 #Preview {
-	RecipeCard(recipe: Recipe.mockRecipe)
+	RecipeCard(recipe: mockRecipe)
 		.padding()
 		.background(AppColors.background)
 }
