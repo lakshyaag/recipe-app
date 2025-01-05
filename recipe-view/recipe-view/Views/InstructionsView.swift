@@ -112,6 +112,21 @@ struct InstructionsSection: View {
 											.padding(.vertical, 8)
 										}
 									}
+									
+									if idx == instructions.count - 1 {
+										Button (action: {
+											withAnimation {
+												currentStep = 0
+											}
+										}) {
+											HStack(spacing: 8) {
+												Text("Start Over")
+												Image(systemName: "arrow.2.circlepath")
+											}
+											.foregroundColor(AppColors.primary)
+											.padding(.vertical, 8)
+										}
+									}
 								}
 								.padding(.horizontal)
 							}
