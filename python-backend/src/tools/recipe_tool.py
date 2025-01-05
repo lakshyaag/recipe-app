@@ -4,6 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
 from src.schemas.recipe import Recipe
 from src.utils.text_utils import sanitize_text
+from src.schemas.recipe import Recipe
 
 
 def format_recipe(website_data: List[Document]) -> Recipe:
@@ -17,3 +18,12 @@ def format_recipe(website_data: List[Document]) -> Recipe:
 
     response = model.with_structured_output(Recipe).invoke(messages)
     return response
+
+def parse_instruction_times(recipe: Recipe) -> Recipe:
+    """
+    Examine each instruction in the recipe for time indications
+    and enrich/return the updated recipe as needed.
+    """
+    # ...implementation logic goes here (e.g., analyzing recipe.instructions)...
+    # return the modified recipe object
+    return recipe

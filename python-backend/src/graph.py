@@ -1,7 +1,7 @@
 from langgraph.graph import StateGraph, END, START
 
 from src.utils.document_loader import get_website_data
-from src.tools.recipe_tool import Recipe, format_recipe
+from src.tools.recipe_tool import Recipe, format_recipe, parse_instruction_times
 from src.schemas.state import GraphState
 
 
@@ -42,9 +42,11 @@ def extract_times(state: GraphState) -> GraphState:
 workflow = StateGraph(GraphState)
 workflow.add_node("parse_link", parse_link)
 workflow.add_node("process_recipe", process_recipe)
+workflow.add_node("break_down_time", break_down_time)
 workflow.add_edge(START, "parse_link")
 workflow.add_edge("parse_link", "process_recipe")
-workflow.add_edge("process_recipe", END)
+workflow.add_edge("process_recipe", "break_down_time")
+workflow.add_edge("break_down_time", END)
 workflow.set_entry_point("parse_link")
 
 graph = workflow.compile()
