@@ -1,4 +1,5 @@
 from typing import List
+from src.utils.logger import logger
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from src.schemas.recipe import InstructionWithTime, Recipe
@@ -41,6 +42,7 @@ def parse_instruction_times(recipe: Recipe) -> Recipe:
         HumanMessage(content=instructions),
     ]
 
+    logger.info("Parsing instruction times for recipe")
     response = model.with_structured_output(Response).invoke(messages)
 
     recipe.instructions = response.instructions_with_time
