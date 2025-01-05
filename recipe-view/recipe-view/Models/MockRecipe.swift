@@ -29,8 +29,8 @@ let mockRecipe: Recipe = Recipe(
 			recipeId: "mock-recipe-001",
 			step: 1,
 			description: "Rinse the brown lentils and red lentils in a large pot.",
-			timeAmount: 5,
-			timeUnit: "minutes"),
+			timeAmount: nil,
+			timeUnit: nil),
 		InstructionWithTime(
 			id: "mock-instruction-002",
 			recipeId: "mock-recipe-001",

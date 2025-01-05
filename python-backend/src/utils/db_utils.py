@@ -139,10 +139,10 @@ class SupabaseClient:
                         "step_number": instruction.step,
                         "description": instruction.description,
                         "time_amount": instruction.time.amount
-                        if hasattr(instruction, "time")
+                        if instruction.time
                         else None,
                         "time_unit": instruction.time.unit
-                        if hasattr(instruction, "time")
+                        if instruction.time
                         else None,
                     }
                 )
