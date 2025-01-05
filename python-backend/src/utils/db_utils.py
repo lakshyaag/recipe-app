@@ -1,4 +1,5 @@
 from supabase import create_client, Client
+from src.utils.logger import logger
 from src.schemas.recipe import Recipe, Ingredient, Instruction
 from typing import Optional
 
@@ -124,7 +125,7 @@ class SupabaseClient:
             )
             return recipe_ingredient_response.data[0]["id"]
         except Exception as e:
-            print(f"Error inserting recipe ingredient: {str(e)}")
+            logger.error("Error inserting recipe ingredient: %s", str(e))
             return None
 
     async def insert_instruction(self, recipe_id: str, instruction: Instruction):
@@ -148,7 +149,7 @@ class SupabaseClient:
             )
             return instruction_response.data[0]["id"]
         except Exception as e:
-            print(f"Error inserting instruction: {str(e)}")
+            logger.error(f"Error inserting instruction: {str(e)}")
             return None
 
     async def insert_recipe(self, recipe: Recipe, recipe_url: str) -> str:
@@ -162,17 +163,21 @@ class SupabaseClient:
                         recipe_id, ingredient, ingredient_id
                     )
                 except Exception as e:
-                    print(f"Error inserting ingredient {ingredient.item}: {str(e)}")
+                    logger.error(
+                        f"Error inserting ingredient {ingredient.item}: {str(e)}"
+                    )
                     raise
 
             for instruction in recipe.instructions:
                 try:
                     await self.insert_instruction(recipe_id, instruction)
                 except Exception as e:
-                    print(f"Error inserting instruction {instruction.step}: {str(e)}")
+                    logger.error(
+                        f"Error inserting instruction {instruction.step}: {str(e)}"
+                    )
                     raise
 
             return recipe_id
         except Exception as e:
-            print(f"Error in insert_recipe: {str(e)}")
+            logger.error(f"Error in insert_recipe: {str(e)}")
             raise

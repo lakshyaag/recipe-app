@@ -1,5 +1,6 @@
 from langgraph.graph import StateGraph, END, START
 
+from src.utils.logger import logger
 from src.utils.document_loader import get_website_data
 from src.tools.recipe_tool import format_recipe
 from src.tools.time_parsing_tool import parse_instruction_times
@@ -9,6 +10,7 @@ from src.schemas.state import GraphState
 def parse_link(state: GraphState) -> GraphState:
     try:
         url = state["url"]
+        logger.info("Parsing link: %s", url)
         website_data = get_website_data(url)
 
         return {"website_data": website_data}

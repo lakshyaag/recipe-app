@@ -1,3 +1,4 @@
+from src.utils.logger import logger
 from typing import Dict
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -31,6 +32,7 @@ async def process_url(request_payload: RequestPayload) -> Dict:
     db_client = SupabaseClient()
     url_hash = db_client.create_url_hash(request_payload.url)
 
+    logger.info("Processing URL: %s", request_payload.url)
     # # Check if recipe exists
     existing_recipe_id = await db_client.get_existing_recipe(url_hash)
     if existing_recipe_id:
