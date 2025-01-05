@@ -20,16 +20,43 @@ struct ContentView: View {
                             Label("Recipe URL", systemImage: "link")
                                 .font(.headline)
                                 .foregroundColor(AppColors.text)
-							
-							
 
-                            TextField("https://example.com/recipe", text: $viewModel.url)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .font(.body)
-                                .autocapitalization(.none)
-                                .disableAutocorrection(true)
-								.textInputAutocapitalization(.never)
-								.padding(4)
+                            HStack(spacing: 12) {
+                                TextField("Paste recipe URL", text: $viewModel.url)
+                                    .textFieldStyle(.plain)
+                                    .font(.body)
+                                    .autocapitalization(.none)
+                                    .disableAutocorrection(true)
+                                    .textInputAutocapitalization(.never)
+                                    .padding(16)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(Color(.systemGray6))
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color(.systemGray4), lineWidth: 1)
+                                    )
+
+                                Button(action: {
+                                    // Dismiss keyboard
+                                    UIApplication.shared.sendAction(
+                                        #selector(UIResponder.resignFirstResponder),
+                                        to: nil,
+                                        from: nil,
+                                        for: nil)
+                                    if let string = UIPasteboard.general.string {
+                                        viewModel.url = string
+                                    }
+                                }) {
+                                    Image(systemName: "doc.on.clipboard")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(AppColors.primary)
+                                        .clipShape(Circle())
+                                }
+                            }
                         }
 
                         Button(action: { viewModel.fetchRecipe() }) {
