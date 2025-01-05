@@ -13,13 +13,6 @@ struct InstructionsSection: View {
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 24) {
-			// Section Header
-			Label("Instructions", systemImage: "list.bullet.clipboard.fill")
-				.font(.system(.title2, design: .rounded, weight: .semibold))
-				.foregroundStyle(AppColors.text)
-				.symbolRenderingMode(.hierarchical)
-				.padding(.horizontal)
-			
 			// Progress Bar
 			GeometryReader { geometry in
 				let stepWidth = geometry.size.width / CGFloat(instructions.count)
