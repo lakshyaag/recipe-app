@@ -13,6 +13,11 @@ class RequestPayload(BaseModel):
 app = FastAPI(debug=True)
 
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Recipe API. Please visit /docs for more information."}
+
+
 @app.post("/process")
 async def process_url(request_payload: RequestPayload) -> Dict:
     """

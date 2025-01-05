@@ -1,7 +1,8 @@
 from langgraph.graph import StateGraph, END, START
 
 from src.utils.document_loader import get_website_data
-from src.tools.recipe_tool import Recipe, format_recipe, parse_instruction_times
+from src.tools.recipe_tool import format_recipe
+from src.tools.time_parsing_tool import parse_instruction_times
 from src.schemas.state import GraphState
 
 
@@ -16,7 +17,7 @@ def parse_link(state: GraphState) -> GraphState:
         raise e
 
 
-def process_recipe(state: GraphState) -> Recipe:
+def process_recipe(state: GraphState) -> GraphState:
     website_data = state["website_data"]
     try:
         if not website_data:
@@ -31,12 +32,13 @@ def process_recipe(state: GraphState) -> Recipe:
 
 def break_down_time(state: GraphState) -> GraphState:
     recipe = state["recipe"]
-    updated = parse_instruction_times(recipe)
-    return {"recipe": updated}
-    recipe = state["recipe"]
+
     try:
         if not recipe:
             raise ValueError("No recipe found")
+
+        updated_recipe = parse_instruction_times(recipe)
+        return {"recipe": updated_recipe}
 
     except Exception as e:
         raise e
