@@ -2,7 +2,7 @@ import SwiftUI
 
 class RecipeViewModel: ObservableObject {
     @Published var url: String = ""
-	@Published var recipe: Recipe? = Recipe.mockRecipe
+	@Published var recipe: Recipe?
     @Published var isLoading: Bool = false
     
     func fetchRecipe() {

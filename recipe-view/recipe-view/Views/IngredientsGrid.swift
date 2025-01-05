@@ -13,7 +13,7 @@ struct IngredientsGridView: View {
 	
 	var body: some View {
 		ScrollView {
-			LazyVGrid(columns: columns, alignment: .leading, spacing: 12) {
+			LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
 				ForEach(ingredients.indices, id: \.self) { index in
 					IngredientCell(text: ingredients[index], index: index + 1)
 				}
@@ -31,9 +31,9 @@ struct IngredientCell: View {
 		Text(text)
 			.font(.callout)
 			.foregroundColor(AppColors.text)
-			.lineLimit(3)
+			.lineLimit(PartialRangeThrough(10))
 			.multilineTextAlignment(.leading)
-			.frame(maxWidth: .infinity, alignment: .leading)
+			.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 			.padding(.horizontal, 12)
 			.padding(.vertical, 8)
 			.background {
@@ -82,12 +82,20 @@ extension View {
 
 #Preview {
 	IngredientsGridView(ingredients: [
-		"2 tablespoons olive oil",
-		"1 pound potatoes",
-		"Salt and pepper",
-		"1 onion, diced",
-		"2 cloves garlic",
-		"Fresh herbs"
+		"2 tablespoons canola oil",
+		"1 pound potatoes, peeled and diced into 1-inch cubes",
+		"1 pound 93% lean ground beef",
+		"1 small yellow onion, diced",
+		"1 red bell pepper, diced",
+		"1 tablespoon Worcestershire sauce",
+		"1 teaspoon Dijon mustard",
+		"2 teaspoons smoked paprika",
+		"1 teaspoon garlic powder",
+		"1 teaspoon dried oregano",
+		"1 teaspoon kosher salt plus additional to taste",
+		"1/2 teaspoon ground black pepper",
+		"1 to 2 teaspoons hot sauce plus additional for serving",
+		"2 green onions, sliced",
 	])
 	.padding()
 	.background(AppColors.background)

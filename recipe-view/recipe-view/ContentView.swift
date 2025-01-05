@@ -20,14 +20,16 @@ struct ContentView: View {
                             Label("Recipe URL", systemImage: "link")
                                 .font(.headline)
                                 .foregroundColor(AppColors.text)
+							
+							
 
                             TextField("https://example.com/recipe", text: $viewModel.url)
-								.keyboardType(.URL)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .font(.body)
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
-                                .textInputAutocapitalization(.never)
+								.textInputAutocapitalization(.never)
+								.padding(4)
                         }
 
                         Button(action: { viewModel.fetchRecipe() }) {
