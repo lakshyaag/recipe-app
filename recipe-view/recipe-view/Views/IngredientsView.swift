@@ -19,15 +19,10 @@ struct IngredientsSection: View {
 		VStack(alignment: .leading, spacing: 16) {
 			// Section Header
 			HStack {
-				Label("Ingredients", systemImage: "basket.fill")
-					.font(.system(.title3, design: .rounded, weight: .semibold))
-					.foregroundColor(AppColors.text)
-					.symbolRenderingMode(.hierarchical)
-				
 				Spacer()
 				
 				Text("\(ingredients.count) items")
-					.font(.subheadline)
+					.font(.headline)
 					.foregroundColor(.secondary)
 			}
 			.padding(.horizontal, 16)
@@ -47,16 +42,22 @@ struct IngredientsSection: View {
 
 struct IngredientCard: View {
 	let ingredient: Ingredient
-	@State private var showSheet = false // State to control the sheet
+	@State private var showSheet = false
+	
+	private var formattedAmount: String {
+		let formatter = NumberFormatter()
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		return formatter.string(from: NSNumber(value: ingredient.amount)) ?? "\(ingredient.amount)"
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 8) {
-			// Icon (optional, replace with relevant icons)
+			// Icon
 			Image(systemName: "leaf.fill")
 				.font(.system(size: 24))
 				.foregroundColor(AppColors.primary)
 				.padding(.bottom, 4)
-			
 			
 			// Ingredient Name
 			Text(ingredient.item)
@@ -67,7 +68,7 @@ struct IngredientCard: View {
 			
 			// Quantity and Unit
 			HStack(alignment: .firstTextBaseline, spacing: 4) {
-				Text("\(ingredient.amount, specifier: "%.1f")")
+				Text(formattedAmount)
 					.font(.subheadline)
 					.foregroundColor(.secondary)
 				
@@ -94,7 +95,7 @@ struct IngredientCard: View {
 		.cornerRadius(12)
 		.shadow(radius: 2)
 		.onTapGesture {
-			showSheet = true // Show the sheet when the card is tapped
+			showSheet = true
 		}
 		.sheet(isPresented: $showSheet) {
 			IngredientDetailSheet(ingredient: ingredient)
@@ -107,10 +108,17 @@ struct IngredientCard: View {
 struct IngredientDetailSheet: View {
 	let ingredient: Ingredient
 	
+	private var formattedAmount: String {
+		let formatter = NumberFormatter()
+		formatter.minimumFractionDigits = 0
+		formatter.maximumFractionDigits = 2
+		return formatter.string(from: NSNumber(value: ingredient.amount)) ?? "\(ingredient.amount)"
+	}
+	
 	var body: some View {
 		NavigationView {
 			VStack(alignment: .leading, spacing: 16) {
-				// Icon (optional)
+				// Icon
 				Image(systemName: "leaf.fill")
 					.font(.system(size: 32))
 					.foregroundColor(AppColors.primary)
@@ -122,7 +130,7 @@ struct IngredientDetailSheet: View {
 					.foregroundColor(.primary)
 				
 				// Quantity and Unit
-				Text("\(ingredient.amount, specifier: "%.1f") \(ingredient.unit)")
+				Text("\(formattedAmount) \(ingredient.unit)")
 					.font(.title3)
 					.foregroundColor(.secondary)
 				
@@ -156,7 +164,8 @@ struct IngredientDetailSheet: View {
 }
 
 #Preview {
-	ScrollView{
-		IngredientsSection(ingredients: mockRecipe.ingredients).padding()
+	ScrollView {
+		IngredientsSection(ingredients: mockRecipe.ingredients)
+			.padding()
 	}
 }

@@ -15,9 +15,10 @@ struct RecipeCard: View {
 				
 				// Recipe metadata
 				HStack(spacing: 20) {
-					if let cookTime = recipe.cookTime {
+					if let cookTimeAmount = recipe.cookTimeAmount,
+					   let cookTimeUnit = recipe.cookTimeUnit {
 							Label {
-								Text("\(cookTime.amount, specifier: "%.0f") \(cookTime.unit)")
+								Text("\(cookTimeAmount, specifier: "%.0f") \(cookTimeUnit)")
 									.font(.subheadline)
 							} icon: {
 								Image(systemName: "timer")
