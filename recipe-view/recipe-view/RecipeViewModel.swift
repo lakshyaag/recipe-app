@@ -2,7 +2,7 @@ import SwiftUI
 
 class RecipeViewModel: ObservableObject {
     @Published var url: String = "https://www.wellplated.com/ground-beef-and-potatoes/"
-    @Published var recipe: Recipe?
+	@Published var recipe: Recipe? = Recipe.mockRecipe
     @Published var isLoading: Bool = false
     
     func fetchRecipe() {
@@ -42,7 +42,7 @@ class RecipeViewModel: ObservableObject {
     func resetForm() {
         withAnimation {
             url = ""
-            recipe = nil
+			recipe = nil
             isLoading = false
         }
     }

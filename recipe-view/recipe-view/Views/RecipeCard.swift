@@ -4,59 +4,81 @@ struct RecipeCard: View {
 	let recipe: Recipe
 
 	var body: some View {
-		VStack(alignment: .leading, spacing: 16) {
-			HStack(spacing: 8) {
-				Image(systemName: "frying.pan")
-					.foregroundColor(.primary)
-				Text(recipe.title)
-					.font(.title2)
-					.fontWeight(.bold)
-					.foregroundColor(.primary)
+		VStack(alignment: .leading, spacing: 24) {
+			// Header
+			VStack(alignment: .leading, spacing: 16) {
+				HStack(spacing: 12) {
+					Image(systemName: "leaf.circle.fill")
+						.font(.system(size: 36))
+						.foregroundStyle(AppColors.accent)
+						.symbolRenderingMode(.hierarchical)
+					
+					Text(recipe.title)
+						.font(.system(.title, design: .rounded, weight: .bold))
+						.foregroundColor(AppColors.text)
+				}
+				
+				// Recipe metadata
+				HStack(spacing: 20) {
+					if let cookTime = recipe.cookTime {
+							Label {
+								Text(cookTime)
+									.font(.subheadline)
+							} icon: {
+								Image(systemName: "timer")
+									.foregroundStyle(AppColors.accent)
+									.symbolRenderingMode(.hierarchical)
+							}
+					}
+					
+					if let difficulty = recipe.difficulty {
+							Label {
+								Text(difficulty.capitalized)
+									.font(.subheadline)
+							} icon: {
+								Image(systemName: "gauge.with.dots.needle.bottom")
+									.foregroundStyle(AppColors.accent)
+									.symbolRenderingMode(.hierarchical)
+							}
+					}
+				}
+				.foregroundColor(AppColors.secondaryText)
 			}
 			
-			Divider().padding(.vertical, 8)
+			Divider()
+				.background(AppColors.divider)
 			
-			
-			HStack(spacing: 16) {
-				if let cookTime = recipe.cookTime, !cookTime.isEmpty {
-					Label(cookTime, systemImage: "clock")
-						.font(.caption)
-						.foregroundColor(.secondary)
-				}
-				if let difficulty = recipe.difficulty, !difficulty.isEmpty {
-					Label(difficulty, systemImage: "exclamationmark.triangle")
-						.font(.caption)
-						.foregroundColor(.secondary)
-				}
-			}
-			.padding(.bottom, 8)
-
-			
-			Group {
-				Text("Ingredients")
-					.font(.headline)
-					.foregroundColor(.primary)
+			// Ingredients Section
+			VStack(alignment: .leading, spacing: 16) {
+				Label("Ingredients", systemImage: "basket.fill")
+					.font(.system(.title2, design: .rounded, weight: .semibold))
+					.foregroundStyle(AppColors.text)
+					.symbolRenderingMode(.hierarchical)
+				
 				IngredientsGridView(ingredients: recipe.ingredients)
 			}
-			Divider().padding(.vertical, 8)
-
 			
-			Group {
-				Text("Instructions")
-					.font(.headline)
-					.foregroundColor(.primary)
+			Divider()
+				.background(AppColors.divider)
+			
+			// Instructions Section
+			VStack(alignment: .leading, spacing: 16) {
+				Label("Instructions", systemImage: "list.bullet.clipboard.fill")
+					.font(.system(.title2, design: .rounded, weight: .semibold))
+					.foregroundStyle(AppColors.text)
+					.symbolRenderingMode(.hierarchical)
+				
 				SwipeInstructionsView(instructions: recipe.instructions)
 			}
 		}
-        .accessibilityElement(children: .contain)
-		.padding()
-		.background(.ultraThickMaterial)
-		.cornerRadius(12)
-		.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+		.padding(20)
+		.background(AppColors.cardBackground)
+		.cornerRadius(16)
 	}
 }
 
 #Preview {
 	RecipeCard(recipe: Recipe.mockRecipe)
 		.padding()
+		.background(AppColors.background)
 }
