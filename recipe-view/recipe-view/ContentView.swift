@@ -33,7 +33,7 @@ struct ContentView: View {
 			.padding(.vertical, 24)
 		}
 		.navigationTitle("Recipe Viewer")
-		.background(AppColors.groupedBackground.ignoresSafeArea())
+		.adaptiveBackgroundColor(AppColors.groupedBackground, dark: AppColors.backgroundSecondary)
 		.toolbar { toolbarContent }
 		.animation(.spring(response: 0.3, dampingFraction: 0.8), value: viewModel.recipe != nil)
 		.alert("Error", isPresented: $viewModel.showError, presenting: viewModel.error) { _ in

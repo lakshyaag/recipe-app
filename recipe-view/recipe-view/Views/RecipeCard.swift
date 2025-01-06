@@ -42,7 +42,7 @@ struct RecipeCard: View {
 			}
 		}
 		.padding(20)
-		.background(AppColors.groupedBackgroundSecondary)
+		.adaptiveBackgroundColor(AppColors.groupedBackgroundSecondary, dark: AppColors.backgroundTertiary)
 		.cornerRadius(16)
 	}
 }
