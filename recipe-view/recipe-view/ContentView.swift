@@ -187,7 +187,7 @@ struct ContentView: View {
 			case .ingredients:
 				IngredientsSection(ingredients: recipe.ingredients)
 			case .instructions:
-				InstructionsSection(instructions: recipe.instructions)
+				InstructionsSection(instructions: recipe.instructions, recipeName: recipe.title)
 			}
 		}
 	}

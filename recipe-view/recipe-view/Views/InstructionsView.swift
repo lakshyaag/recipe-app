@@ -6,10 +6,99 @@
 //
 
 import SwiftUI
+import ActivityKit
+import UserNotifications
 
 struct InstructionsSection: View {
 	let instructions: [InstructionWithTime]
+	let recipeName: String
 	@State private var currentStep = 0
+	@State private var currentActivity: Activity<RecipeTimerAttributes>? = nil
+	
+	func startTimer() {
+		guard let timeAmount = instructions[currentStep].timeAmount,
+			  let timeUnit = instructions[currentStep].timeUnit else { return }
+		
+		let timeInterval: TimeInterval
+		switch timeUnit.lowercased() {
+		case "minutes", "minute", "mins", "min":
+			timeInterval = timeAmount * 60
+		case "hours", "hour", "hrs", "hr":
+			timeInterval = timeAmount * 3600
+		default:
+			timeInterval = timeAmount
+		}
+		
+		let attributes = RecipeTimerAttributes(
+			stepDescription: instructions[currentStep].description,
+			timeAmount: timeAmount,
+			timeUnit: timeUnit
+		)
+		
+		let contentState = RecipeTimerAttributes.ContentState(
+			endTime: Date().addingTimeInterval(timeInterval),
+			stepNumber: currentStep + 1,
+			recipeName: recipeName
+		)
+		
+		do {
+			// Start the Live Activity
+			let activity = try Activity.request(
+				attributes: attributes,
+				contentState: contentState,
+				pushType: nil
+			)
+			currentActivity = activity
+			
+			// Schedule a notification for when the timer starts
+			let startContent = UNMutableNotificationContent()
+			startContent.title = "Timer Started"
+			startContent.body = "Step \(currentStep + 1): \(instructions[currentStep].description)"
+			startContent.sound = .default
+			
+			let startRequest = UNNotificationRequest(
+				identifier: "timer-start-\(currentStep)",
+				content: startContent,
+				trigger: nil // Show immediately
+			)
+			
+			// Schedule a notification for when the timer completes
+			let completionContent = UNMutableNotificationContent()
+			completionContent.title = "Timer Complete!"
+			completionContent.body = "Step \(currentStep + 1) is ready"
+			completionContent.sound = .default
+			
+			let completionTrigger = UNTimeIntervalNotificationTrigger(
+				timeInterval: timeInterval,
+				repeats: false
+			)
+			
+			let completionRequest = UNNotificationRequest(
+				identifier: "timer-complete-\(currentStep)",
+				content: completionContent,
+				trigger: completionTrigger
+			)
+			
+			// Add both notifications
+			UNUserNotificationCenter.current().add(startRequest)
+			UNUserNotificationCenter.current().add(completionRequest)
+			
+		} catch {
+			print("Error starting timer: \(error.localizedDescription)")
+		}
+	}
+	
+	func cleanupTimer() {
+		// End the Live Activity if it exists
+		Task {
+			await currentActivity?.end(using: nil, dismissalPolicy: .immediate)
+		}
+		
+		// Remove any pending notifications for this step
+		UNUserNotificationCenter.current().removePendingNotificationRequests(
+			withIdentifiers: ["timer-start-\(currentStep)", "timer-complete-\(currentStep)"]
+		)
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 24) {
@@ -42,14 +131,18 @@ struct InstructionsSection: View {
 				
 				if let timeAmount = instructions[currentStep].timeAmount,
 				   let timeUnit = instructions[currentStep].timeUnit {
-					Label {
-						Text("\(timeAmount, specifier: "%.0f") \(timeUnit)")
-							.font(.subheadline.weight(.medium))
-					} icon: {
-						Image(systemName: "timer")
-							.foregroundStyle(AppColors.brandBase)
+					Button {
+						startTimer()
+					} label: {
+						Label {
+							Text("\(timeAmount, specifier: "%.0f") \(timeUnit)")
+								.font(.subheadline.weight(.medium))
+						} icon: {
+							Image(systemName: "timer")
+								.foregroundStyle(AppColors.brandBase)
+						}
+						.foregroundColor(AppColors.contentSecondary)
 					}
-					.foregroundColor(AppColors.contentSecondary)
 				}
 			}
 			.padding(.horizontal)
@@ -132,12 +225,15 @@ struct InstructionsSection: View {
 			.frame(minHeight: 300)
 		}
 		.padding(.vertical)
+		.onDisappear {
+			cleanupTimer()
+		}
 	}
 }
 
 #Preview {
 	ScrollView {
-		InstructionsSection(instructions: mockRecipe.instructions)
+		InstructionsSection(instructions: mockRecipe.instructions, recipeName: "Test Recipe")
 			.padding()
 	}
 	.background(AppColors.groupedBackground)

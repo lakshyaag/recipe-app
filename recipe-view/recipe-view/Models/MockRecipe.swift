@@ -36,8 +36,8 @@ let mockRecipe: Recipe = Recipe(
 			recipeId: "mock-recipe-001",
 			step: 2,
 			description: "Pour 4 cups of water into the pot.",
-			timeAmount: 1,
-			timeUnit: "minute"),
+			timeAmount: 10,
+			timeUnit: "seconds"),
 		InstructionWithTime(
 			id: "mock-instruction-003",
 			recipeId: "mock-recipe-001",
