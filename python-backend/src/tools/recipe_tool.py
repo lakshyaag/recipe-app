@@ -9,7 +9,10 @@ from textwrap import dedent
 
 
 def format_recipe(website_data: List[Document]) -> Recipe:
-    model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    model = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0.1,
+    )
     messages = [
         SystemMessage(
             dedent(
