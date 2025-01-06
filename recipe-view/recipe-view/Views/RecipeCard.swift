@@ -10,7 +10,7 @@ struct RecipeCard: View {
 				HStack(spacing: 12) {
 					Text(recipe.title)
 						.font(.system(.title, design: .rounded, weight: .bold))
-						.foregroundColor(AppColors.text)
+						.foregroundColor(AppColors.contentPrimary)
 				}
 				
 				// Recipe metadata
@@ -22,7 +22,7 @@ struct RecipeCard: View {
 									.font(.subheadline)
 							} icon: {
 								Image(systemName: "timer")
-									.foregroundStyle(AppColors.accent)
+									.foregroundStyle(AppColors.brandBase)
 									.symbolRenderingMode(.hierarchical)
 							}
 					}
@@ -33,16 +33,16 @@ struct RecipeCard: View {
 									.font(.subheadline)
 							} icon: {
 								Image(systemName: "gauge.with.dots.needle.50percent")
-									.foregroundStyle(AppColors.accent)
+									.foregroundStyle(AppColors.brandBase)
 									.symbolRenderingMode(.hierarchical)
 							}
 					}
 				}
-				.foregroundColor(AppColors.secondaryText)
+				.foregroundColor(AppColors.contentSecondary)
 			}
 		}
 		.padding(20)
-		.background(AppColors.cardBackground)
+		.background(AppColors.groupedBackgroundSecondary)
 		.cornerRadius(16)
 	}
 }
@@ -50,5 +50,5 @@ struct RecipeCard: View {
 #Preview {
 	RecipeCard(recipe: mockRecipe)
 		.padding()
-		.background(AppColors.background)
+		.background(AppColors.groupedBackground)
 }

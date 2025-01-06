@@ -19,12 +19,12 @@ struct InstructionsSection: View {
 				ZStack(alignment: .leading) {
 					// Background track
 					RoundedRectangle(cornerRadius: 2)
-						.fill(AppColors.secondaryText.opacity(0.2))
+						.fill(AppColors.contentSecondary.opacity(0.2))
 						.frame(height: 4)
 					
 					// Progress indicator
 					RoundedRectangle(cornerRadius: 2)
-						.fill(AppColors.primary)
+						.fill(AppColors.brandBase)
 						.frame(width: stepWidth * CGFloat(currentStep + 1), height: 4)
 						.animation(.spring(response: 0.3), value: currentStep)
 				}
@@ -36,7 +36,7 @@ struct InstructionsSection: View {
 			HStack {
 				Text("Step \(currentStep + 1) of \(instructions.count)")
 					.font(.subheadline.weight(.medium))
-					.foregroundColor(AppColors.secondaryText)
+					.foregroundColor(AppColors.contentSecondary)
 				
 				Spacer()
 				
@@ -47,9 +47,9 @@ struct InstructionsSection: View {
 							.font(.subheadline.weight(.medium))
 					} icon: {
 						Image(systemName: "timer")
-							.foregroundStyle(AppColors.primary)
+							.foregroundStyle(AppColors.brandBase)
 					}
-					.foregroundColor(AppColors.secondaryText)
+					.foregroundColor(AppColors.contentSecondary)
 				}
 			}
 			.padding(.horizontal)
@@ -63,13 +63,13 @@ struct InstructionsSection: View {
 								// Step Description
 								Text(instructions[idx].description)
 									.font(.body)
-									.foregroundColor(AppColors.text)
+									.foregroundColor(AppColors.contentPrimary)
 									.lineSpacing(8)
 									.multilineTextAlignment(.leading)
 									.padding(.horizontal)
 									.padding(.vertical, 24)
 									.frame(maxWidth: .infinity, alignment: .leading)
-									.background(AppColors.cardBackground)
+									.background(AppColors.groupedBackgroundSecondary)
 									.cornerRadius(16)
 								
 								// Navigation Buttons
@@ -84,7 +84,7 @@ struct InstructionsSection: View {
 												Image(systemName: "chevron.left")
 												Text("Previous Step")
 											}
-											.foregroundColor(AppColors.primary)
+											.foregroundColor(AppColors.actionPrimary)
 											.padding(.vertical, 8)
 										}
 									}
@@ -101,7 +101,7 @@ struct InstructionsSection: View {
 												Text("Next Step")
 												Image(systemName: "chevron.right")
 											}
-											.foregroundColor(AppColors.primary)
+											.foregroundColor(AppColors.actionPrimary)
 											.padding(.vertical, 8)
 										}
 									}
@@ -116,7 +116,7 @@ struct InstructionsSection: View {
 												Text("Start Over")
 												Image(systemName: "arrow.2.circlepath")
 											}
-											.foregroundColor(AppColors.primary)
+											.foregroundColor(AppColors.actionPrimary)
 											.padding(.vertical, 8)
 										}
 									}
@@ -140,6 +140,6 @@ struct InstructionsSection: View {
 		InstructionsSection(instructions: mockRecipe.instructions)
 			.padding()
 	}
-	.background(AppColors.background)
+	.background(AppColors.groupedBackground)
 }
 

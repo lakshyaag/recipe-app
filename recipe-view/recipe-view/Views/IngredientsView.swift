@@ -91,7 +91,7 @@ struct IngredientCard: View {
 		}
 		.padding()
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-		.background(AppColors.backgroundPrimary)
+		.adaptiveBackgroundColor(AppColors.backgroundPrimary, dark: AppColors.backgroundSecondary)
 		.cornerRadius(12)
 		.shadow(color: AppColors.shadow, radius: 2)
 		.onTapGesture {

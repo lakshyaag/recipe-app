@@ -33,7 +33,7 @@ struct ContentView: View {
 			.padding(.vertical, 24)
 		}
 		.navigationTitle("Recipe Viewer")
-		.background(AppColors.background.ignoresSafeArea())
+		.background(AppColors.groupedBackground.ignoresSafeArea())
 		.toolbar { toolbarContent }
 		.animation(.spring(response: 0.3, dampingFraction: 0.8), value: viewModel.recipe != nil)
 		.alert("Error", isPresented: $viewModel.showError, presenting: viewModel.error) { _ in
@@ -49,16 +49,16 @@ struct ContentView: View {
 			actionButton
 		}
 		.padding(20)
-		.background(AppColors.cardBackground)
+		.background(AppColors.groupedBackgroundSecondary)
 		.cornerRadius(16)
-		.shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+		.shadow(color: AppColors.shadow, radius: 8, x: 0, y: 2)
 	}
 
 	private var urlInputField: some View {
 		VStack(alignment: .leading, spacing: 8) {
 			Label("Recipe URL", systemImage: "link")
 				.font(.headline)
-				.foregroundColor(AppColors.text)
+				.foregroundColor(AppColors.contentPrimary)
 
 			HStack(spacing: 12) {
 				textField
@@ -79,11 +79,11 @@ struct ContentView: View {
 			.padding(16)
 			.background(
 				RoundedRectangle(cornerRadius: 12)
-					.fill(Color(.systemGray6))
+					.fill(AppColors.backgroundSecondary)
 			)
 			.overlay(
 				RoundedRectangle(cornerRadius: 12)
-					.stroke(viewModel.error != nil ? Color.red : Color(.systemGray4), lineWidth: 1)
+					.stroke(viewModel.error != nil ? AppColors.error : AppColors.separatorPrimary, lineWidth: 1)
 			)
 			.animation(.easeInOut(duration: 0.2), value: viewModel.error)
 	}
@@ -92,9 +92,9 @@ struct ContentView: View {
 		Button(action: handlePaste) {
 			Image(systemName: "doc.on.clipboard")
 				.font(.system(size: 16, weight: .medium))
-				.foregroundColor(.white)
+				.foregroundColor(AppColors.backgroundPrimary)
 				.frame(width: 44, height: 44)
-				.background(AppColors.primary)
+				.background(AppColors.actionPrimary)
 				.clipShape(Circle())
 		}
 	}
@@ -104,7 +104,7 @@ struct ContentView: View {
 			if let error = viewModel.error {
 				Text(error.localizedDescription)
 					.font(.caption)
-					.foregroundColor(.red)
+					.foregroundColor(AppColors.error)
 					.padding(.horizontal, 4)
 					.transition(.opacity)
 			}
@@ -147,7 +147,9 @@ struct ContentView: View {
 		RoundedRectangle(cornerRadius: 12, style: .continuous)
 			.fill(
 				LinearGradient(
-					colors: [AppColors.primary, AppColors.secondary],
+					colors: [AppColors.brandBase,
+							 AppColors.brandDark,
+							],
 					startPoint: .leading,
 					endPoint: .trailing
 				)
@@ -195,7 +197,7 @@ struct ContentView: View {
 			Button(action: { viewModel.resetForm() }) {
 				Label("Reset", systemImage: "arrow.clockwise")
 					.labelStyle(.iconOnly)
-					.foregroundColor(AppColors.primary)
+					.foregroundColor(AppColors.actionPrimary)
 			}
 			.disabled(viewModel.isLoading)
 		}
