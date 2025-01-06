@@ -25,10 +25,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
 			if granted {
 				print("Notification permission granted")
+				UNUserNotificationCenter.current().delegate = self
 			} else if let error = error {
 				print("Error requesting notification permission: \(error.localizedDescription)")
 			}
 		}
 		return true
+	}
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+		print("Notification received with identifier \(notification.request.identifier)")
+		// So we call the completionHandler telling that the notification should display a banner and play the notification sound - this will happen while the app is in foreground
+		completionHandler([.banner, .sound])
 	}
 }

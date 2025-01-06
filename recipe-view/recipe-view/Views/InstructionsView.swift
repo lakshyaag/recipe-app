@@ -55,11 +55,12 @@ struct InstructionsSection: View {
 			startContent.title = "Timer Started"
 			startContent.body = "Step \(currentStep + 1): \(instructions[currentStep].description)"
 			startContent.sound = .default
+			startContent.interruptionLevel = .critical
 			
 			let startRequest = UNNotificationRequest(
 				identifier: "timer-start-\(currentStep)",
 				content: startContent,
-				trigger: nil // Show immediately
+				trigger: nil
 			)
 			
 			// Schedule a notification for when the timer completes
