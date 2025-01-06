@@ -1,6 +1,6 @@
 //
 //  AppIntent.swift
-//  RecipeWidgetExtension
+//  RecipeTimerWidget
 //
 //  Created by Lakshya Agarwal on 2025-01-05.
 //
