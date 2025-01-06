@@ -69,7 +69,7 @@ struct InstructionsSection: View {
 									.padding(.horizontal)
 									.padding(.vertical, 24)
 									.frame(maxWidth: .infinity, alignment: .leading)
-									.background(AppColors.groupedBackgroundSecondary)
+									.adaptiveBackgroundColor(AppColors.groupedBackgroundSecondary, dark: AppColors.backgroundTertiary)
 									.cornerRadius(16)
 								
 								// Navigation Buttons
