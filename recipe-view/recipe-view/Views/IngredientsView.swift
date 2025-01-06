@@ -22,7 +22,7 @@ struct IngredientsSection: View {
 				
 				Text("\(ingredients.count) items")
 					.font(.headline)
-					.foregroundColor(.secondary)
+					.foregroundColor(AppColors.contentSecondary)
 			}
 			.padding(.horizontal, 16)
 			
@@ -42,7 +42,8 @@ struct IngredientsSection: View {
 struct IngredientCard: View {
 	let ingredient: Ingredient
 	@State private var showSheet = false
-	
+
+
 	private var formattedAmount: String {
 		let formatter = NumberFormatter()
 		formatter.minimumFractionDigits = 0
@@ -55,13 +56,13 @@ struct IngredientCard: View {
 			// Icon
 			Image(systemName: "leaf.fill")
 				.font(.system(size: 24))
-				.foregroundColor(AppColors.primary)
+				.foregroundColor(AppColors.brandBase)
 				.padding(.bottom, 4)
 			
 			// Ingredient Name
 			Text(ingredient.item)
 				.font(.headline)
-				.foregroundColor(.primary)
+				.foregroundColor(AppColors.contentPrimary)
 				.lineLimit(2)
 				.truncationMode(.tail)
 			
@@ -69,11 +70,11 @@ struct IngredientCard: View {
 			HStack(alignment: .firstTextBaseline, spacing: 4) {
 				Text(formattedAmount)
 					.font(.subheadline)
-					.foregroundColor(.secondary)
+					.foregroundColor(AppColors.contentSecondary)
 				
 				Text(ingredient.unit)
 					.font(.subheadline)
-					.foregroundColor(.secondary)
+					.foregroundColor(AppColors.contentSecondary)
 			}
 			.lineLimit(1)
 			.truncationMode(.tail)
@@ -82,7 +83,7 @@ struct IngredientCard: View {
 			if let notes = ingredient.notes, !notes.isEmpty {
 				Text(notes)
 					.font(.footnote)
-					.foregroundColor(.gray)
+					.foregroundColor(AppColors.contentTertiary)
 					.lineLimit(2)
 					.minimumScaleFactor(0.75)
 					.truncationMode(.tail)
@@ -90,9 +91,9 @@ struct IngredientCard: View {
 		}
 		.padding()
 		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-		.background(Color(.systemBackground))
+		.background(AppColors.backgroundPrimary)
 		.cornerRadius(12)
-		.shadow(radius: 2)
+		.shadow(color: AppColors.shadow, radius: 2)
 		.onTapGesture {
 			showSheet = true
 		}
@@ -120,28 +121,29 @@ struct IngredientDetailSheet: View {
 				// Icon
 				Image(systemName: "leaf.fill")
 					.font(.system(size: 32))
-					.foregroundColor(AppColors.primary)
+					.foregroundColor(AppColors.brandBase)
 					.padding(.bottom, 8)
 				
 				// Ingredient Name
 				Text(ingredient.item)
 					.font(.title2)
-					.foregroundColor(.primary)
+					.foregroundColor(AppColors.contentPrimary)
 				
 				// Quantity and Unit
 				Text("\(formattedAmount) \(ingredient.unit)")
 					.font(.title3)
-					.foregroundColor(.secondary)
+					.foregroundColor(AppColors.contentSecondary)
 				
 				// Notes (if available)
 				if let notes = ingredient.notes, !notes.isEmpty {
-					Text("Notes:")
-						.font(.headline)
-						.padding(.top, 8)
-					
-					Text(notes)
-						.font(.body)
-						.foregroundColor(.gray)
+						Text("Notes:")
+							.font(.headline)
+							.foregroundColor(AppColors.contentPrimary)
+							.padding(.top, 8)
+						
+						Text(notes)
+							.font(.body)
+							.foregroundColor(AppColors.contentTertiary)
 				}
 				
 				Spacer()
