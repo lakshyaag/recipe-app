@@ -59,11 +59,24 @@ class Instruction(BaseModel):
     )
 
 
+class ServingSize(BaseModel):
+    """
+    Represents the serving size of a recipe.
+    """
+
+    amount: Union[float, int] = Field(
+        ..., description="The quantity of the serving size"
+    )
+    unit: str = Field(..., description="The unit of measurement for the serving size")
+
+
 class Recipe(BaseModel):
     """Represents a simple recipe object."""
 
     title: str = Field(..., description="The name of the recipe")
-    servings: int = Field(..., description="The number of servings the recipe makes")
+    servings: ServingSize = Field(
+        ..., description="The number of servings the recipe makes"
+    )
     cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
     difficulty: Literal["novice", "home_cook", "professional_chef"] = Field(
         ..., description="The difficulty of the recipe"

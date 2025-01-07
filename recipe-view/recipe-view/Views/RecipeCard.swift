@@ -4,51 +4,53 @@ struct RecipeCard: View {
 	let recipe: Recipe
 
 	var body: some View {
-		VStack(alignment: .leading, spacing: 24) {
-			// Header
-			VStack(alignment: .leading, spacing: 16) {
-				HStack(spacing: 12) {
-					Text(recipe.title)
-						.font(.system(.title, design: .rounded, weight: .bold))
-						.foregroundColor(AppColors.contentPrimary)
+		VStack(alignment: .leading, spacing: 12) {
+			// Title
+			Text(recipe.title)
+				.font(.headline)
+				.foregroundColor(AppColors.contentPrimary)
+				.lineLimit(2)
+			
+			HStack(spacing: 16) {
+				// Cook Time
+				if let amount = recipe.cookTimeAmount, let unit = recipe.cookTimeUnit {
+					Label {
+						Text("\(Int(amount)) \(unit)")
+							.font(.subheadline)
+							.foregroundColor(AppColors.contentSecondary)
+					} icon: {
+						Image(systemName: "clock")
+							.foregroundColor(AppColors.brandBase)
+					}
 				}
 				
-				// Recipe metadata
-				HStack(spacing: 20) {
-					if let cookTimeAmount = recipe.cookTimeAmount,
-					   let cookTimeUnit = recipe.cookTimeUnit {
-							Label {
-								Text("\(cookTimeAmount, specifier: "%.0f") \(cookTimeUnit)")
-									.font(.subheadline)
-							} icon: {
-								Image(systemName: "timer")
-									.foregroundStyle(AppColors.brandBase)
-									.symbolRenderingMode(.hierarchical)
-							}
-					}
-					
-					if let difficulty = recipe.difficulty {
-							Label {
-								Text(difficulty.capitalized)
-									.font(.subheadline)
-							} icon: {
-								Image(systemName: "gauge.with.dots.needle.50percent")
-									.foregroundStyle(AppColors.brandBase)
-									.symbolRenderingMode(.hierarchical)
-							}
-					}
+				// Ingredients Count
+				Label {
+					Text("\(recipe.ingredients.count) ingredients")
+						.font(.subheadline)
+						.foregroundColor(AppColors.contentSecondary)
+				} icon: {
+					Image(systemName: "list.bullet")
+						.foregroundColor(AppColors.brandBase)
 				}
-				.foregroundColor(AppColors.contentSecondary)
 			}
 		}
-		.padding(20)
-		.adaptiveBackgroundColor(AppColors.groupedBackgroundSecondary, dark: AppColors.backgroundTertiary)
-		.cornerRadius(16)
+		.padding()
+		.frame(maxWidth: .infinity, alignment: .leading)
+		.background(AppColors.backgroundPrimary)
+		.cornerRadius(12)
+		.overlay(
+			RoundedRectangle(cornerRadius: 12)
+				.stroke(AppColors.backgroundSecondary, lineWidth: 1)
+		)
+		.shadow(color: AppColors.shadow.opacity(0.1), radius: 2, y: 1)
 	}
 }
 
-#Preview {
-	RecipeCard(recipe: mockRecipe)
-		.padding()
-		.background(AppColors.groupedBackground)
+// Preview
+struct RecipeCard_Previews: PreviewProvider {
+	static var previews: some View {
+		RecipeCard(recipe: mockRecipe)
+			.padding()
+	}
 }

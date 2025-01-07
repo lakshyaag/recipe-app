@@ -43,7 +43,7 @@ enum RecipeError: LocalizedError, Equatable {
 }
 
 class RecipeViewModel: ObservableObject {
-    @Published var url: String = "https://www.skinnytaste.com/tofu-stir-fry-with-vegetables-in-a-soy-sesame-sauce/"
+    @Published var url: String = ""
 	@Published var recipe: Recipe?
     @Published var isLoading: Bool = false
     @Published var error: RecipeError?
@@ -67,7 +67,7 @@ class RecipeViewModel: ObservableObject {
 
     func fetchRecipe() {
         guard validateURL() else { return }
-        guard let requestUrl = URL(string: "http://localhost:8000/process") else {
+        guard let requestUrl = URL(string: "http://10.88.111.10:8000/process") else {
             error = .invalidURL
             showError = true
             return
@@ -126,9 +126,11 @@ class RecipeViewModel: ObservableObject {
                     if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let recipeData = jsonResponse["recipe"] as? [String: Any] {
                         let recipeJSON = try JSONSerialization.data(withJSONObject: recipeData)
+						
 						let decoded = try JSONDecoder().decode(Recipe.self, from: recipeJSON)
+						print("decoded: \(decoded)")
                         self?.recipe = decoded
-						print(decoded)
+						
                     } else {
                         self?.error = .decodingError
                         self?.showError = true

@@ -7,12 +7,14 @@ struct Recipe: Decodable {
     let instructions: [InstructionWithTime]
     let cookTimeAmount: Double?
     let cookTimeUnit: String?
-    let difficulty: String?
+	let servingsAmount: Double?
+	let servingsUnit: String?
+	let difficulty: String?
     let createdAt: String
     let updatedAt: String
     let userId: String?
     let url: String
-    let urlHash: String
+    let urlHash: String	
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -21,6 +23,8 @@ struct Recipe: Decodable {
         case instructions
         case cookTimeAmount = "cook_time_amount"
         case cookTimeUnit = "cook_time_unit"
+		case servingsAmount = "servings_amount"
+		case servingsUnit = "servings_unit"
         case difficulty
         case createdAt = "created_at"
         case updatedAt = "updated_at"
