@@ -99,6 +99,32 @@ enum AppColors {
         startPoint: .leading,
         endPoint: .trailing
     )
+    
+    // MARK: - Category Colors
+    static func categoryColor(_ category: Ingredient.Category) -> Color {
+        switch category {
+        case .protein:
+            return Color(uiColor: .systemRed)
+        case .grains:
+            return Color(uiColor: .systemBrown)
+        case .produce:
+            return Color(uiColor: .systemGreen)
+        case .oils:
+            return Color(uiColor: .systemYellow)
+        case .condiments:
+            return Color(uiColor: .systemOrange)
+        case .spices:
+            return Color(uiColor: .systemPurple)
+        case .sauces:
+            return Color(uiColor: .systemTeal)
+        case .dairy:
+            return Color(uiColor: .systemCyan)
+        case .herbs:
+            return Color(uiColor: .systemMint)
+        case .other:
+            return Color(uiColor: .systemGray)
+        }
+    }
 }
 
 // MARK: - Color Scheme Extensions

@@ -44,7 +44,7 @@ enum RecipeError: LocalizedError, Equatable {
 
 class RecipeViewModel: ObservableObject {
     @Published var url: String = "https://www.skinnytaste.com/tofu-stir-fry-with-vegetables-in-a-soy-sesame-sauce/"
-	@Published var recipe: Recipe? = mockRecipe
+	@Published var recipe: Recipe?
     @Published var isLoading: Bool = false
     @Published var error: RecipeError?
     @Published var showError: Bool = false
@@ -67,7 +67,7 @@ class RecipeViewModel: ObservableObject {
 
     func fetchRecipe() {
         guard validateURL() else { return }
-        guard let requestUrl = URL(string: "https://recipe-app-93g7.onrender.com/process") else {
+        guard let requestUrl = URL(string: "http://localhost:8000/process") else {
             error = .invalidURL
             showError = true
             return
@@ -123,18 +123,16 @@ class RecipeViewModel: ObservableObject {
                 }
 
                 do {
-                    let jsonResponse =
-                        try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                    guard let recipeData = jsonResponse?["recipe"] as? [String: Any] else {
+                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let recipeData = jsonResponse["recipe"] as? [String: Any] {
+                        let recipeJSON = try JSONSerialization.data(withJSONObject: recipeData)
+						let decoded = try JSONDecoder().decode(Recipe.self, from: recipeJSON)
+                        self?.recipe = decoded
+						print(decoded)
+                    } else {
                         self?.error = .decodingError
                         self?.showError = true
-                        return
                     }
-
-                    let recipeJSON = try JSONSerialization.data(
-                        withJSONObject: recipeData, options: [])
-                    let decoded = try JSONDecoder().decode(Recipe.self, from: recipeJSON)
-                    self?.recipe = decoded
                 } catch {
                     self?.error = .decodingError
                     self?.showError = true

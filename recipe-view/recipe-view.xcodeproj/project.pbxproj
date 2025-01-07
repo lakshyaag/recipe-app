@@ -62,6 +62,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Extensions/UIColor+Extensions.swift",
+				Models/Recipe.swift,
 				Utilities/AppColors.swift,
 				Views/RecipeTimerAttributes.swift,
 			);
