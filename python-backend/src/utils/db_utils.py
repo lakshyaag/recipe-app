@@ -40,7 +40,7 @@ class SupabaseClient:
 
         ingredients = (
             self.supabase.table("recipe_ingredients")
-            .select("ingredients(*), amount, unit, notes")
+            .select("ingredients(*), amount, unit, preparation, is_optional, notes")
             .eq("recipe_id", recipe_id)
             .execute()
         )
@@ -58,8 +58,11 @@ class SupabaseClient:
             "ingredients": [
                 {
                     "item": ing["ingredients"]["item"],
+                    "category": ing["ingredients"]["category"],
                     "amount": ing["amount"],
                     "unit": ing["unit"],
+                    "preparation": ing["preparation"],
+                    "is_optional": ing["is_optional"],
                     "notes": ing["notes"],
                 }
                 for ing in ingredients.data
@@ -75,7 +78,8 @@ class SupabaseClient:
             .insert(
                 {
                     "title": recipe.title,
-                    "servings": recipe.servings,
+                    "servings_amount": recipe.servings.amount,
+                    "servings_unit": recipe.servings.unit,
                     "difficulty": recipe.difficulty,
                     "cook_time_amount": recipe.cookTime.amount
                     if recipe.cookTime
@@ -89,11 +93,12 @@ class SupabaseClient:
         )
         return recipe_response.data[0]["id"]
 
-    async def get_or_create_ingredient(self, item: str) -> str:
+    async def get_or_create_ingredient(self, ingredient: Ingredient) -> str:
+        # Try to find the ingredient
         ingredient_response = (
             self.supabase.table("ingredients")
             .select("id")
-            .eq("item", item)
+            .eq("item", ingredient.item)
             .maybe_single()
             .execute()
         )
@@ -101,8 +106,11 @@ class SupabaseClient:
         if ingredient_response:
             return ingredient_response.data["id"]
 
+        # Create new ingredient
         new_ingredient = (
-            self.supabase.table("ingredients").insert({"item": item}).execute()
+            self.supabase.table("ingredients")
+            .insert({"item": ingredient.item, "category": ingredient.category})
+            .execute()
         )
 
         return new_ingredient.data[0]["id"]
@@ -119,6 +127,8 @@ class SupabaseClient:
                         "ingredient_id": ingredient_id,
                         "amount": ingredient.amount,
                         "unit": ingredient.unit,
+                        "preparation": ingredient.preparation,
+                        "is_optional": ingredient.is_optional,
                         "notes": ingredient.notes,
                     }
                 )
@@ -159,7 +169,7 @@ class SupabaseClient:
 
             for ingredient in recipe.ingredients:
                 try:
-                    ingredient_id = await self.get_or_create_ingredient(ingredient.item)
+                    ingredient_id = await self.get_or_create_ingredient(ingredient)
                     await self.insert_recipe_ingredient(
                         recipe_id, ingredient, ingredient_id
                     )

@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 from pydantic import BaseModel, Field
 
 
@@ -7,11 +7,33 @@ class Ingredient(BaseModel):
     Represents an ingredient in a recipe.
     """
 
-    item: str = Field(..., description="The name of the ingredient.")
-    amount: float = Field(..., description="The quantity of the ingredient")
-    unit: str = Field(..., description="The unit of measurement for the ingredient")
+    item: str = Field(..., description="The name of the ingredient")
+    amount: Union[float, int] = Field(..., description="The quantity of the ingredient")
+    unit: str = Field(..., description="Unit of measurement")
+
+    category: Literal[
+        "protein",
+        "grains",
+        "produce",
+        "oils",
+        "condiments",
+        "spices",
+        "sauces",
+        "dairy",
+        "herbs",
+        "other",
+    ] = Field(default="other", description="High-level category for grouping")
+
+    preparation: Optional[str] = Field(
+        None, description="Preparation instructions (e.g., crushed, julienned)"
+    )
+
+    is_optional: bool = Field(
+        default=False, description="Whether ingredient is optional"
+    )
+
     notes: Optional[str] = Field(
-        None, description="Any additional notes about the ingredient"
+        None, description="Additional notes about the ingredient"
     )
 
 
@@ -21,7 +43,7 @@ class Time(BaseModel):
     # TODO: This will eventually map to a time UI component in the frontend
     """
 
-    amount: float = Field(..., description="The quantity of time needed")
+    amount: Union[float, int] = Field(..., description="The quantity of time needed")
     unit: str = Field(..., description="The unit of measurement for the time")
 
 
@@ -37,18 +59,31 @@ class Instruction(BaseModel):
     )
 
 
+class ServingSize(BaseModel):
+    """
+    Represents the serving size of a recipe.
+    """
+
+    amount: Union[float, int] = Field(
+        ..., description="The quantity of the serving size"
+    )
+    unit: str = Field(..., description="The unit of measurement for the serving size")
+
+
 class Recipe(BaseModel):
     """Represents a simple recipe object."""
 
     title: str = Field(..., description="The name of the recipe")
-    servings: int = Field(..., description="The number of servings the recipe makes")
+    servings: ServingSize = Field(
+        ..., description="The number of servings the recipe makes"
+    )
+    cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
+    difficulty: Literal["novice", "home_cook", "professional_chef"] = Field(
+        ..., description="The difficulty of the recipe"
+    )
     ingredients: List[Ingredient] = Field(
         ..., description="The ingredients needed for the recipe"
     )
     instructions: List[Instruction] = Field(
         ..., description="The instructions for the recipe"
-    )
-    cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
-    difficulty: Literal["novice", "home_cook", "professional_chef"] = Field(
-        ..., description="The difficulty of the recipe"
     )

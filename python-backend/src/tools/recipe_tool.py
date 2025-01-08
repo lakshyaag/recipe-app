@@ -9,16 +9,22 @@ from textwrap import dedent
 
 
 def format_recipe(website_data: List[Document]) -> Recipe:
-    model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    model = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0.1,
+    )
     messages = [
         SystemMessage(
             dedent(
                 """
-                Please extract the recipe from the following website content. 
+                Please extract the recipe from the following website content. Include the serving size and unit of measurement.
                 If a recipe is not found, return an empty recipe.
 
                 For each instruction, include the time if it is specified. 
                 If a time range is specified, use the lower bound of the range as the time.
+
+                For each ingredient, include the category of the ingredient as one of: [protein, grains, produce, oils, condiments, spices, sauces, dairy, herbs, other].
+                Ensure that each ingredient's preparation method is included if available.
                 """
             )
         ),
