@@ -225,7 +225,8 @@ struct InstructionsSection: View {
 			.tabViewStyle(.page(indexDisplayMode: .never))
 			.frame(minHeight: 300)
 		}
-		.padding(.vertical)
+		.padding(.vertical, 16)
+		.padding(.horizontal, 16)
 		.onDisappear {
 			cleanupTimer()
 		}

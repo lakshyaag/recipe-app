@@ -1,5 +1,6 @@
 from langgraph.graph import StateGraph, END, START
 
+from src.utils.cleanup import combine_ingredients
 from src.utils.logger import logger
 from src.utils.document_loader import get_website_data
 from src.tools.recipe_tool import format_recipe
@@ -25,6 +26,9 @@ def process_recipe(state: GraphState) -> GraphState:
             raise ValueError("No website data found")
 
         recipe = format_recipe(website_data)
+
+        # Combine all ingredients with the same name, unit, and preparation
+        recipe.ingredients = combine_ingredients(recipe.ingredients)
         return {"recipe": recipe}
 
     except Exception as e:

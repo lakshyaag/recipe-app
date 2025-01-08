@@ -43,7 +43,7 @@ enum RecipeError: LocalizedError, Equatable {
 }
 
 class RecipeViewModel: ObservableObject {
-    @Published var url: String = ""
+    @Published var url: String = "https://www.allrecipes.com/bang-bang-chicken-nuggets-recipe-8767654"
 	@Published var recipe: Recipe?
     @Published var isLoading: Bool = false
     @Published var error: RecipeError?
@@ -128,7 +128,6 @@ class RecipeViewModel: ObservableObject {
                         let recipeJSON = try JSONSerialization.data(withJSONObject: recipeData)
 						
 						let decoded = try JSONDecoder().decode(Recipe.self, from: recipeJSON)
-						print("decoded: \(decoded)")
                         self?.recipe = decoded
 						
                     } else {
