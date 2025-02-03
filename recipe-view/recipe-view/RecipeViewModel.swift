@@ -43,7 +43,7 @@ enum RecipeError: LocalizedError, Equatable {
 }
 
 class RecipeViewModel: ObservableObject {
-    @Published var url: String = "https://www.allrecipes.com/bang-bang-chicken-nuggets-recipe-8767654"
+    @Published var url: String = ""
 	@Published var recipe: Recipe?
     @Published var isLoading: Bool = false
     @Published var error: RecipeError?
@@ -67,7 +67,7 @@ class RecipeViewModel: ObservableObject {
 
     func fetchRecipe() {
         guard validateURL() else { return }
-        guard let requestUrl = URL(string: "http://10.88.111.10:8000/process") else {
+        guard let requestUrl = URL(string: "https://recipe-app-93g7.onrender.com/process") else {
             error = .invalidURL
             showError = true
             return
