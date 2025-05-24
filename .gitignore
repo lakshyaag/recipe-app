@@ -170,3 +170,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .aider*
+db_cluster-10-02-2025@16-17-13.backup.gz

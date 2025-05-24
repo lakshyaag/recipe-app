@@ -37,7 +37,7 @@ async def process_url(request_payload: RequestPayload) -> Dict:
     url_hash = db_client.create_url_hash(request_payload.url)
 
     logger.info("Processing URL: %s", request_payload.url)
-    # # Check if recipe exists
+    # Check if recipe exists
     existing_recipe_id = await db_client.get_existing_recipe(url_hash)
     if existing_recipe_id:
         recipe_data = await db_client.get_recipe_by_id(existing_recipe_id)

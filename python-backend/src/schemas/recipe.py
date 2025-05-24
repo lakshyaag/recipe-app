@@ -78,7 +78,7 @@ class Recipe(BaseModel):
         ..., description="The number of servings the recipe makes"
     )
     cookTime: Optional[Time] = Field(None, description="The cook time for the recipe")
-    difficulty: Literal["novice", "home_cook", "professional_chef"] = Field(
+    difficulty: Literal["novice", "home_cook", "professional_chef", "other"] = Field(
         ..., description="The difficulty of the recipe"
     )
     ingredients: List[Ingredient] = Field(
